@@ -660,11 +660,14 @@ function operadorNome(){return getOperador()?.nome||loginNome();}
    FLUXO
    ===================================================================== */
 async function start(session){
+  // confere se a sessão ainda vale (pode ter sido encerrada em outro aparelho)
+  const {data:ud,error:ue}=await sb.auth.getUser();
+  if(ue||!ud?.user){await sb.auth.signOut({scope:'local'});renderLogin('Sua sessão expirou. Entre novamente.');return;}
   S.session=session;
   const {data,error}=await nx.rpc('meus_modulos');
   if(error){renderLogin('Não foi possível carregar seus acessos: '+error.message);return;}
   S.mods=data||{};
-  if(!S.mods.seco&&!S.mods.cmv){await sb.auth.signOut();renderLogin('Este login não tem acesso a nenhum módulo. Fale com o gestor.');return;}
+  if(!S.mods.seco&&!S.mods.cmv){await sb.auth.signOut({scope:'local'});renderLogin('Este login não tem acesso a nenhum módulo. Fale com o gestor.');return;}
   const f=await nx.from('funcionarios').select('id,nome').eq('login_id',session.user.id).eq('ativo',true).order('nome');
   S.funcs=f.data||[];
   route();
@@ -691,7 +694,7 @@ function topBar(){
   <button class="icon-btn" title="Sair" onclick="sair()">${ic('out')}</button></header>`;
 }
 function trocarPessoa(){clearOperador();renderPessoas();}
-async function sair(){clearOperador();try{localStorage.removeItem('nexus.modulo');}catch(e){}await sb.auth.signOut();S.session=null;renderLogin();}
+async function sair(){clearOperador();try{localStorage.removeItem('nexus.modulo');}catch(e){}await sb.auth.signOut({scope:'local'});S.session=null;renderLogin();}
 window.trocarPessoa=trocarPessoa;window.sair=sair;
 
 /* ---------- Login ---------- */
@@ -760,6 +763,12 @@ async function adminFn(corpo){
   const {data:{session}}=await sb.auth.getSession();
   const r=await fetch(`${SUPABASE_URL}/functions/v1/nexus-usuarios`,{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY,Authorization:`Bearer ${session?.access_token}`},body:JSON.stringify(corpo)});
   const j=await r.json().catch(()=>({}));
+  if(r.status===401&&!corpo._retry){
+    // sessão expirada/encerrada em outro aparelho: tenta renovar uma vez; se não der, pede login
+    const {error}=await sb.auth.refreshSession();
+    if(!error) return adminFn({...corpo,_retry:true});
+    await sb.auth.signOut({scope:'local'});renderLogin('Sua sessão expirou. Entre novamente.');throw new Error('Sessão expirada.');
+  }
   if(!r.ok) throw new Error(j.error||'Erro ao falar com o servidor.');
   return j;
 }

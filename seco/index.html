@@ -748,7 +748,7 @@ async function startSession(session){
   }finally{starting=false;}
 }
 function resetState(){state=freshState();window.state=state;closeAllModals();}
-async function logout(){try{localStorage.removeItem(OPERADOR_KEY);}catch(e){}await sb.auth.signOut();location.replace(PORTAL);}
+async function logout(){try{localStorage.removeItem(OPERADOR_KEY);}catch(e){}await sb.auth.signOut({scope:'local'});location.replace(PORTAL);}
 function trocarModulo(){location.href=PORTAL+'?trocar=modulo';}
 function trocarPessoa(){try{localStorage.removeItem(OPERADOR_KEY);}catch(e){}location.href=PORTAL+'?trocar=pessoa&m=seco';}
 window.trocarModulo=trocarModulo;window.trocarPessoa=trocarPessoa;
