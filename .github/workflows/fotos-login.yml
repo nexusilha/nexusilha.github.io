@@ -1,0 +1,43 @@
+name: Baixar fotos do login (Wikimedia Commons)
+on:
+  push:
+    branches: [fetch-fotos]
+permissions:
+  contents: write
+jobs:
+  fotos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - run: pip install pillow
+      - name: Baixar e otimizar
+        run: |
+          mkdir -p assets/login
+          python3 - <<'PY'
+          import urllib.request, urllib.parse, io
+          from PIL import Image
+          UA={'User-Agent':'GrupoIlha-GestaoInsumos/1.0 (nexusilha.github.io; build de assets)'}
+          F={'convento':('Terceira Ponte (10038703316).jpg',1920,1600),
+             'ponte':('Terceira Ponte vista do Convento.jpg',3840,2400),
+             'pedra-azul':('Pedra Azul -Largato.jpg',1920,1920),
+             'por-do-sol':('Vitória, no Espírito Santo, vista do Convento da Penha.jpg',1920,1920),
+             'enseada':('Enseada do suá vitória espírito santo.jpg',1920,1920)}
+          for k,(f,w,out) in F.items():
+              u='https://commons.wikimedia.org/wiki/Special:FilePath/'+urllib.parse.quote(f)+'?width='+str(w)
+              data=urllib.request.urlopen(urllib.request.Request(u,headers=UA),timeout=60).read()
+              im=Image.open(io.BytesIO(data)).convert('RGB')
+              if im.width>out: im=im.resize((out,round(im.height*out/im.width)),Image.LANCZOS)
+              im.save(f'assets/login/{k}.jpg','JPEG',quality=74,optimize=True,progressive=True)
+              sm=im.resize((960,round(im.height*960/im.width)),Image.LANCZOS)
+              sm.save(f'assets/login/{k}-m.jpg','JPEG',quality=70,optimize=True,progressive=True)
+              print(k,im.size)
+          PY
+          ls -la assets/login
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add assets/login
+          git commit -m "Fotos do login (Wikimedia Commons, licenças livres)" || exit 0
+          git push origin HEAD:main
