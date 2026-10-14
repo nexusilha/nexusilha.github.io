@@ -652,6 +652,8 @@ a.logo-link{display:inline-flex;align-items:center;text-decoration:none;color:in
 .mod-box .hd{display:flex;align-items:center;gap:10px;font-weight:600}
 @media (max-width:720px){.p-body{padding:22px 14px 60px}.p-hello h1{font-size:23px}.p-top .who{display:none}.p-top{padding:14px 16px;min-height:72px;gap:12px}.p-top img{height:42px}.p-top .tt{padding-left:12px}.p-top .tt b{font-size:16px}.p-top .tt span{font-size:12px}.mod{min-height:0}}
 </style>
+<link rel="stylesheet" href="assets/login/es-bg.css">
+<script src="assets/login/es-bg.js" defer></script>
 </head>
 <body>
 <div id="app"><div class="boot"><div><div class="spin"></div>Carregando…</div></div></div>
@@ -787,7 +789,7 @@ window.trocarPessoa=trocarPessoa;window.sair=sair;
 /* ---------- Login ---------- */
 function renderLogin(msg){
   history.replaceState(null,'',location.pathname+location.search);
-  $('#app').innerHTML=`<div class="login">
+  $('#app').innerHTML=`<div class="login" data-es-bg>
     <div class="login-art">
       <img src="${LOGO}" alt="Grupo Ilha">
       <div><h2>Gestão de Insumos, num lugar só.</h2><p>Estoque Seco e Câmara Fria com o mesmo login: requisições, entregas, contagens, CMV e não conformidades — tudo registrado.</p></div>
