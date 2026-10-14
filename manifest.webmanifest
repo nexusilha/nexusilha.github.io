@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "Gestão de Insumos — Grupo Ilha",
-  "short_name": "Insumos",
+  "name": "Nexus — Gestão de Insumos",
+  "short_name": "Nexus",
   "description": "Estoque Seco e Câmara Fria · CMV · RNC do Ilha do Caranguejo.",
   "lang": "pt-BR",
   "start_url": "/?app=1",
