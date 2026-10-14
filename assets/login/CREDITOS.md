@@ -15,3 +15,5 @@ Mudanças feitas nas fotos: redimensionamento, compressão JPEG e um tom laranja
 ## Placa do login
 
 `placa.webp`: placa de madeira enviada pelo Vinicius. Removi o fundo e troquei o bordô pelo marrom-alaranjado da marca. As correntes são desenhadas em SVG.
+
+`madeira.webp` e `prego.png`: textura de madeira e prego recortados da mesma placa, usados no cartão de login.
