@@ -160,12 +160,151 @@
     st.onResize = tamanho;
     if (mouse && !calmo) window.addEventListener('pointermove', st.onMove, { passive: true });
     window.addEventListener('resize', st.onResize, { passive: true });
+    try { st.placa = criarPlaca(host); } catch (e) { /* sem placa: fica o logotipo */ }
+  }
+
+
+  /* ---------------------------------------------------------------
+     Placa de madeira pendurada (substitui o logotipo do login).
+     Física de pêndulo com duas correntes paralelas: a placa balança
+     num arco e continua nivelada. Arraste para balançar; no computador,
+     passar o mouse rápido também empurra. Sem a imagem, fica o logo.
+     --------------------------------------------------------------- */
+  var ELO = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="44" viewBox="0 0 16 44">' +
+    '<defs><linearGradient id="f" x1="0" x2="1"><stop offset="0" stop-color="#4A2A12"/><stop offset=".45" stop-color="#A86A35"/><stop offset="1" stop-color="#5A3216"/></linearGradient></defs>' +
+    '<rect x="2.2" y="1.5" width="11.6" height="24" rx="5.8" fill="none" stroke="url(#f)" stroke-width="3.2"/>' +
+    '<rect x="6.3" y="19" width="3.4" height="27" rx="1.7" fill="url(#f)"/>' +
+    '<rect x="6.3" y="-3" width="3.4" height="6" rx="1.7" fill="url(#f)"/></svg>');
+  var ANEL = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">' +
+    '<defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#B37440"/><stop offset=".5" stop-color="#6B3B18"/><stop offset="1" stop-color="#3E220E"/></linearGradient></defs>' +
+    '<circle cx="11" cy="11" r="8" fill="none" stroke="url(#g)" stroke-width="3.6"/></svg>');
+  var GANCHO = [0.1356, 0.8756]; // posição das correntes (fração da largura da placa)
+  var PROP = 333 / 760;          // altura / largura da imagem
+
+  function criarPlaca(host) {
+    var logo = host.querySelector('.login-logo-out');
+    if (!logo) return null;
+    var img = new Image(); img.decoding = 'async';
+    img.alt = 'Ilha do Caranguejo · Grupo Ilha';
+    var P = { vivo: true, th: 0, w: 0, drag: null, raf: 0, ult: 0, vento: 0 };
+    img.onload = function () { if (P.vivo) montarPlaca(); };
+    img.onerror = function () { P.vivo = false; }; // fica o logotipo original
+    img.src = BASE + 'placa.webp';
+
+    function montarPlaca() {
+      var slot = el('div', 'es-placa-slot');
+      logo.parentNode.insertBefore(slot, logo);
+      host.classList.add('es-com-placa');
+      var raiz = el('div', 'es-placa');
+      var c1 = el('div', 'es-corrente'), c2 = el('div', 'es-corrente');
+      c1.style.backgroundImage = c2.style.backgroundImage = 'url("' + ELO + '")';
+      var tab = el('div', 'es-tabua'); tab.setAttribute('role', 'img'); tab.setAttribute('aria-label', img.alt);
+      tab.title = 'Arraste para balançar';
+      var a1 = el('i', 'es-anel'), a2 = el('i', 'es-anel');
+      a1.style.backgroundImage = a2.style.backgroundImage = 'url("' + ANEL + '")';
+      img.className = 'es-tabua-img'; img.draggable = false;
+      tab.appendChild(a1); tab.appendChild(a2); tab.appendChild(img);
+      raiz.appendChild(c1); raiz.appendChild(c2); raiz.appendChild(tab);
+      host.appendChild(raiz);
+      P.slot = slot; P.raiz = raiz; P.c = [c1, c2]; P.tab = tab; P.a = [a1, a2];
+
+      function medir() {
+        var hr = host.getBoundingClientRect(), sr = slot.getBoundingClientRect();
+        P.w = sr.width; P.h = P.w * PROP;
+        P.x0 = sr.left - hr.left; P.L = Math.max(24, sr.top - hr.top);
+        tab.style.width = P.w + 'px'; tab.style.height = P.h + 'px';
+        GANCHO.forEach(function (g, k) {
+          P.a[k].style.left = (g * P.w - 11) + 'px';
+          P.c[k].style.left = (P.x0 + g * P.w - 8) + 'px';
+          P.c[k].style.height = (P.L + 4) + 'px';
+        });
+        desenhar();
+      }
+      P.medir = medir;
+      medir();
+      if (window.ResizeObserver) { P.ro = new ResizeObserver(medir); P.ro.observe(host); P.ro.observe(slot); }
+      window.addEventListener('resize', medir, { passive: true });
+
+      // ---- interação: arrastar (mouse e toque) ----
+      tab.addEventListener('pointerdown', function (e) {
+        e.preventDefault();
+        try { tab.setPointerCapture(e.pointerId); } catch (x) {}
+        P.drag = { id: e.pointerId, x: e.clientX, dx0: P.L * Math.sin(P.th), t: performance.now(), th: P.th };
+        P.om = 0; raiz.classList.add('pega');
+      });
+      tab.addEventListener('pointermove', function (e) {
+        if (P.drag && e.pointerId === P.drag.id) {
+          var dx = P.drag.dx0 + (e.clientX - P.drag.x);
+          var lim = P.L * 0.82;
+          dx = Math.max(-lim, Math.min(lim, dx));
+          var novo = Math.asin(dx / P.L), t = performance.now(), dt = Math.max(8, t - P.drag.t) / 1000;
+          P.om = (novo - P.drag.th) / dt * 0.6 + P.om * 0.4;
+          P.th = novo; P.drag.th = novo; P.drag.t = t;
+        } else if (!P.drag && mouse && e.movementX) {
+          // empurrão ao passar o mouse
+          P.om += Math.max(-.6, Math.min(.6, e.movementX * 0.012)) * (40 / Math.max(40, P.L));
+        }
+      });
+      function soltar(e) { if (P.drag && (!e || e.pointerId === P.drag.id)) { P.drag = null; raiz.classList.remove('pega'); } }
+      tab.addEventListener('pointerup', soltar); tab.addEventListener('pointercancel', soltar);
+      tab.addEventListener('lostpointercapture', function () { soltar(); });
+
+      P.ult = performance.now();
+      P.raf = requestAnimationFrame(passo);
+      // um pequeno balanço de chegada
+      if (!calmo) P.om = 0.9 * (40 / Math.max(40, P.L));
+    }
+
+    function desenhar() {
+      if (!P.raiz) return;
+      var th = P.th, L = P.L;
+      var dx = L * Math.sin(th), dy = L * (1 - Math.cos(th));
+      var tilt = -(P.om || 0) * 0.9; // inclinação leve conforme a velocidade (graus)
+      P.tab.style.transform = 'translate3d(' + (P.x0 + dx).toFixed(2) + 'px,' + (L - dy).toFixed(2) + 'px,0) rotate(' + tilt.toFixed(2) + 'deg)';
+      var g = (-th * 180 / Math.PI).toFixed(3);
+      P.c[0].style.transform = P.c[1].style.transform = 'rotate(' + g + 'deg)';
+    }
+
+    function passo(t) {
+      if (!P.vivo) return;
+      P.raf = requestAnimationFrame(passo);
+      var dt = Math.min(0.033, (t - P.ult) / 1000); P.ult = t;
+      if (!host.isConnected || !host.getClientRects().length || document.hidden) return;
+      if (!P.drag) {
+        // pêndulo amortecido: período ~1,7 s, independe do tamanho da corrente
+        var k = 13.5, c = 0.75;
+        if (!calmo) { // brisa: empurrões raros e suaves quando parada
+          P.vento -= dt;
+          if (P.vento <= 0) { P.vento = 5 + Math.random() * 6; if (Math.abs(P.om) < .05) P.om += (Math.random() - .5) * .35 * (40 / Math.max(40, P.L)); }
+        }
+        P.om += (-k * Math.sin(P.th) - c * P.om) * dt;
+        P.th += P.om * dt;
+        if (Math.abs(P.th) > 1.0) { P.th = Math.sign(P.th) * 1.0; P.om *= -0.4; }
+      } else {
+        P.om *= 0.9;
+      }
+      desenhar();
+    }
+
+    return {
+      destruir: function () {
+        P.vivo = false; cancelAnimationFrame(P.raf);
+        if (P.ro) P.ro.disconnect();
+        window.removeEventListener('resize', P.medir);
+        if (P.raiz && P.raiz.isConnected) P.raiz.remove();
+        if (P.slot && P.slot.isConnected) P.slot.remove();
+        host.classList.remove('es-com-placa');
+      }
+    };
   }
 
   function desmontar() {
     var st = atual; if (!st) return;
     st.vivo = false; clearTimeout(st.timer); cancelAnimationFrame(st.raf);
     window.removeEventListener('pointermove', st.onMove); window.removeEventListener('resize', st.onResize);
+    if (st.placa) st.placa.destruir();
     if (st.bg.isConnected) st.bg.remove(); if (st.leg.isConnected) st.leg.remove();
     atual = null;
   }

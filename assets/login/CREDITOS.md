@@ -11,3 +11,7 @@ Todas vêm do Wikimedia Commons, com licença livre. Foram baixadas, redimension
 | enseada.jpg | Enseada do Suá, Vitória | Jsilvares | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Enseada_do_suá_vitória_espírito_santo.jpg |
 
 Mudanças feitas nas fotos: redimensionamento, compressão JPEG e um tom laranja aplicado pela página (CSS). As fotos originais não foram alteradas.
+
+## Placa do login
+
+`placa.webp`: placa de madeira enviada pelo Vinicius. Removi o fundo e troquei o bordô pelo marrom-alaranjado da marca. As correntes são desenhadas em SVG.
