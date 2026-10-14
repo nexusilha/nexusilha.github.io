@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Merriweather:wght@700;900&display=swap");
 /* =====================================================================
    Fundo do login — paisagens do Espírito Santo (Gestão de Insumos)
    Compartilhado pelo portal (Estoque Seco) e pelo módulo Câmara Fria.
    Se este arquivo ou as fotos falharem, o login continua com o fundo
    laranja original (contingência).
    ===================================================================== */
-[data-es-bg]{position:relative;isolation:isolate;overflow:hidden}
+[data-es-bg]{position:relative;isolation:isolate;overflow:visible;overflow-x:clip}
 [data-es-bg] > :not(.es-bg):not(.es-leg):not(.es-placa){position:relative;z-index:1}
 .es-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
   background:radial-gradient(120% 90% at 85% 110%,#E55C0E 0%,rgba(229,92,14,0) 55%),linear-gradient(160deg,#F5A21A 0%,#F19100 45%,#EA8200 100%);
@@ -69,8 +69,8 @@
 /* Computador: login à esquerda, paisagem livre à direita */
 @media (min-width:961px){
   .login[data-es-bg]{justify-items:start;padding-left:clamp(32px,6vw,110px)!important}
-  .login[data-es-bg] .login-form{width:400px;align-items:center}
-  #login[data-es-bg]{display:grid;grid-template-columns:min(400px,100%);justify-content:start;align-content:center;justify-items:center;padding-left:clamp(32px,6vw,110px)}
+  .login[data-es-bg] .login-form{width:440px;align-items:center}
+  #login[data-es-bg]{display:grid;grid-template-columns:min(440px,100%);justify-content:start;align-content:center;justify-items:center;padding-left:clamp(32px,6vw,110px)}
   #login[data-es-bg].oculto{display:none}
   #login[data-es-bg] .login-box{max-width:none}
   .es-shade::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(45,14,0,.42) 0%,rgba(45,14,0,.18) 32%,rgba(45,14,0,0) 55%)}
@@ -93,61 +93,109 @@
 @media (max-height:640px) and (min-width:961px){.es-placa-slot{width:250px;margin:22px auto 16px}}
 
 
+
 /* =====================================================================
-   Placa de login: madeira real (a mesma da placa do restaurante),
-   cantos chanfrados, pregos de verdade e letreiro pintado.
+   Placa de login entalhada: nogueira escura, moldura em relevo,
+   rebites metálicos, campos e botão embutidos na madeira.
    O cartão fica pregado: não se mexe enquanto o usuário digita.
    ===================================================================== */
 [data-es-bg] .login-box{
   position:relative;z-index:0;isolation:isolate;
-  background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important;
-  padding:30px 32px 26px!important;
-  filter:drop-shadow(0 26px 30px rgba(30,10,0,.55)) drop-shadow(0 3px 4px rgba(30,10,0,.45))}
-[data-es-bg] .login-box::before{content:"";position:absolute;inset:0;z-index:-1;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px);
+  background:none!important;border:0!important;border-radius:26px!important;box-shadow:none!important;overflow:visible!important;
+  padding:44px 40px 40px!important;width:100%;max-width:440px!important;
+  filter:drop-shadow(0 28px 34px rgba(20,6,0,.6)) drop-shadow(0 3px 4px rgba(20,6,0,.5))}
+[data-es-bg] .login-box::before{content:"";position:absolute;inset:0;z-index:-2;border-radius:26px;
   background:
-    url("prego.png") left 9px top 9px/22px 22px no-repeat,
-    url("prego.png") right 9px top 9px/22px 22px no-repeat,
-    url("prego.png") left 9px bottom 9px/22px 22px no-repeat,
-    url("prego.png") right 9px bottom 9px/22px 22px no-repeat,
-    radial-gradient(120% 90% at 50% 40%,rgba(255,220,170,.10) 0%,rgba(0,0,0,0) 55%,rgba(30,12,0,.32) 100%),
-    url("madeira.webp") center top/440px auto repeat-y,
-    #7A4F2C}
-/* borda gasta da tábua */
-[data-es-bg] .login-box::after{content:"";position:absolute;inset:0;z-index:-1;clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px);pointer-events:none;
-  box-shadow:inset 0 0 0 2px rgba(45,22,6,.75),inset 0 0 0 3px rgba(255,210,160,.12),inset 0 0 26px 4px rgba(40,16,2,.55)}
-/* Letreiro pintado (como "DO CARANGUEJO") */
-[data-es-bg] .login-box h1{font:800 30px/1.05 "Baloo 2",Inter,system-ui,sans-serif!important;color:#FFF5E6!important;letter-spacing:.01em;
-  text-shadow:2px 0 0 #A63E05,-2px 0 0 #A63E05,0 2px 0 #A63E05,0 -2px 0 #A63E05,1.5px 1.5px 0 #A63E05,-1.5px -1.5px 0 #A63E05,1.5px -1.5px 0 #A63E05,-1.5px 1.5px 0 #A63E05,0 4px 0 #6E2903,0 6px 8px rgba(20,6,0,.45)}
-[data-es-bg] .login-box > p{color:#F6E2C4!important;font-weight:600;margin-top:6px;text-shadow:0 1px 2px rgba(20,6,0,.8)}
-[data-es-bg] .login-box .lbl,[data-es-bg] .login-box .campo label{color:#FCEBD2!important;font-weight:700!important;letter-spacing:.06em;text-transform:uppercase;font-size:12px!important;
-  text-shadow:0 1px 2px rgba(20,6,0,.85)}
-/* campos: placas claras pintadas, contorno laranja como o painel do logotipo */
-[data-es-bg] .login-box .inp,[data-es-bg] .login-box input{background:#FFF8EC!important;border:2px solid #F0A43A!important;border-radius:7px!important;
-  box-shadow:0 0 0 2px rgba(70,28,4,.55),inset 0 2px 3px rgba(120,60,20,.18)!important;color:#2A1A0E}
-[data-es-bg] .login-box .inp:focus,[data-es-bg] .login-box input:focus{border-color:#FFC062!important;box-shadow:0 0 0 2px rgba(70,28,4,.55),0 0 0 6px rgba(255,170,60,.35)!important;outline:none}
-[data-es-bg] .login-box .inp::placeholder,[data-es-bg] .login-box input::placeholder{color:#A88B6E}
-[data-es-bg] .login-box .pw-eye{color:#8C6A4A}
+    radial-gradient(circle at 37% 32%,rgba(255,255,255,.98) 0,rgba(255,255,255,.6) 2.5px,rgba(255,255,255,0) 8px) left 16px top 16px/26px 26px no-repeat, radial-gradient(circle closest-side,#C9CED2 0,#9AA2A8 35%,#646B71 70%,#33383C 92%,rgba(30,20,10,0) 100%) left 16px top 16px/26px 26px no-repeat, radial-gradient(circle at 50% 50%,rgba(10,4,0,.65) 0,rgba(10,4,0,.35) 55%,rgba(10,4,0,0) 72%) left 15px top 19px/30px 30px no-repeat,
+    radial-gradient(circle at 37% 32%,rgba(255,255,255,.98) 0,rgba(255,255,255,.6) 2.5px,rgba(255,255,255,0) 8px) right 16px top 16px/26px 26px no-repeat, radial-gradient(circle closest-side,#C9CED2 0,#9AA2A8 35%,#646B71 70%,#33383C 92%,rgba(30,20,10,0) 100%) right 16px top 16px/26px 26px no-repeat, radial-gradient(circle at 50% 50%,rgba(10,4,0,.65) 0,rgba(10,4,0,.35) 55%,rgba(10,4,0,0) 72%) right 15px top 19px/30px 30px no-repeat,
+    radial-gradient(circle at 37% 32%,rgba(255,255,255,.98) 0,rgba(255,255,255,.6) 2.5px,rgba(255,255,255,0) 8px) left 16px bottom 16px/26px 26px no-repeat, radial-gradient(circle closest-side,#C9CED2 0,#9AA2A8 35%,#646B71 70%,#33383C 92%,rgba(30,20,10,0) 100%) left 16px bottom 16px/26px 26px no-repeat, radial-gradient(circle at 50% 50%,rgba(10,4,0,.65) 0,rgba(10,4,0,.35) 55%,rgba(10,4,0,0) 72%) left 15px bottom 13px/30px 30px no-repeat,
+    radial-gradient(circle at 37% 32%,rgba(255,255,255,.98) 0,rgba(255,255,255,.6) 2.5px,rgba(255,255,255,0) 8px) right 16px bottom 16px/26px 26px no-repeat, radial-gradient(circle closest-side,#C9CED2 0,#9AA2A8 35%,#646B71 70%,#33383C 92%,rgba(30,20,10,0) 100%) right 16px bottom 16px/26px 26px no-repeat, radial-gradient(circle at 50% 50%,rgba(10,4,0,.65) 0,rgba(10,4,0,.35) 55%,rgba(10,4,0,0) 72%) right 15px bottom 13px/30px 30px no-repeat,
+    radial-gradient(130% 100% at 30% 20%,rgba(255,210,160,.10) 0%,rgba(0,0,0,0) 50%,rgba(10,4,0,.35) 100%),
+    url("madeira-escura.webp") center top/460px auto repeat-y,
+    #4A2E18;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(10,4,0,.85),
+    inset 0 2px 0 2px rgba(255,214,170,.16),
+    inset 0 -3px 0 2px rgba(10,4,0,.45),
+    inset 0 0 22px 2px rgba(10,4,0,.5)}
+/* moldura entalhada (sulco) por dentro da borda */
+[data-es-bg] .login-box::after{content:"";position:absolute;inset:11px;z-index:-1;border-radius:18px;pointer-events:none;
+  box-shadow:0 0 0 1px rgba(255,214,170,.14),inset 0 0 0 1.5px rgba(10,4,0,.7),inset 0 3px 7px rgba(10,4,0,.55),inset 0 -1px 0 1.5px rgba(255,214,170,.08)}
+/* Título em cobre/laranja da marca, em relevo */
+[data-es-bg] .login-box h1{font:900 34px/1.08 Merriweather,Georgia,"Times New Roman",serif!important;letter-spacing:-.005em;
+  background:linear-gradient(180deg,#FFD2A0 0%,#F7A24E 42%,#E8762C 70%,#C9581C 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important;
+  filter:drop-shadow(0 2px 0 rgba(10,4,0,.85)) drop-shadow(0 4px 6px rgba(10,4,0,.45));padding-bottom:2px}
+[data-es-bg] .login-box > p{font:700 17px/1.3 Merriweather,Georgia,serif!important;color:#F1DDBF!important;margin-top:10px!important;
+  text-shadow:0 2px 0 rgba(10,4,0,.8),0 3px 6px rgba(10,4,0,.4)}
+[data-es-bg] .login-box .lbl,[data-es-bg] .login-box .campo label{color:#F3E0C4!important;font:800 13px Inter,system-ui,sans-serif!important;letter-spacing:.09em;text-transform:uppercase;
+  text-shadow:0 1px 0 rgba(10,4,0,.9),0 2px 4px rgba(10,4,0,.5);margin-bottom:8px;display:block}
+[data-es-bg] .login-box .fld,[data-es-bg] .login-box .campo{margin-bottom:18px}
+[data-es-bg] .login-box form > .fld:first-of-type,[data-es-bg] .login-box h1 + p + .campo{margin-top:26px}
+/* campos embutidos (rebaixo na madeira) */
+[data-es-bg] .login-box .inp,[data-es-bg] .login-box input{height:50px!important;font-size:16px!important;padding:0 16px!important;
+  background:linear-gradient(180deg,#F1EADF 0%,#FBF7F0 30%,#FBF7F0 100%)!important;border:1px solid #1E1007!important;border-radius:10px!important;color:#2A1A0E!important;
+  box-shadow:0 0 0 3px #2B190C,0 0 0 4.5px rgba(255,214,170,.16),inset 0 3px 5px rgba(60,30,10,.25)!important}
+[data-es-bg] .login-box .pw-wrap .inp,[data-es-bg] .login-box .pw-wrap input{padding-right:50px!important}
+[data-es-bg] .login-box .inp:focus,[data-es-bg] .login-box input:focus{outline:none;border-color:#E55C0E!important;
+  box-shadow:0 0 0 3px #2B190C,0 0 0 5px rgba(241,145,0,.65),inset 0 3px 5px rgba(60,30,10,.2)!important}
+[data-es-bg] .login-box .inp::placeholder,[data-es-bg] .login-box input::placeholder{color:#8E7A66}
+[data-es-bg] .login-box .pw-eye{color:#4A3424;right:8px}
 [data-es-bg] .login-box .pw-eye:hover{color:#E55C0E;background:rgba(229,92,14,.1)}
-/* botão: painel pintado, mesmo desenho do letreiro do restaurante */
+[data-es-bg] .login-box .pw-eye svg{width:22px;height:22px}
+/* botão: esmalte laranja embutido, letras gravadas */
 [data-es-bg] .login-box .btn.primary,[data-es-bg] .login-box .btn.bloco{
-  font:800 19px/1 "Baloo 2",Inter,system-ui,sans-serif!important;letter-spacing:.06em;text-transform:uppercase;color:#FFF5E6!important;
-  height:auto!important;padding:13px 16px 11px!important;border-radius:9px!important;
-  border:3px solid #F5A93A!important;
-  background:radial-gradient(120% 140% at 50% 0%,#F2772A 0%,#E55C0E 45%,#B9480A 100%)!important;
-  box-shadow:0 0 0 2.5px #6E2903,0 6px 0 #5A2102,0 10px 16px rgba(30,10,0,.45)!important;
-  text-shadow:0 2px 0 #8A3504,0 0 1px #8A3504;transition:transform .08s ease,box-shadow .08s ease,filter .15s ease}
-[data-es-bg] .login-box .btn.primary:hover,[data-es-bg] .login-box .btn.bloco:hover{filter:brightness(1.07)}
-[data-es-bg] .login-box .btn.primary:active,[data-es-bg] .login-box .btn.bloco:active{transform:translateY(4px);box-shadow:0 0 0 2.5px #6E2903,0 2px 0 #5A2102,0 4px 8px rgba(30,10,0,.4)!important}
-[data-es-bg] .login-box .help{color:#F3DCBB!important;border-top:1px dashed rgba(255,225,185,.35);padding-top:12px;text-shadow:0 1px 2px rgba(20,6,0,.8)}
-[data-es-bg] .login-box .help span{color:#DDBF98}
-[data-es-bg] .login-box .erro{color:#9E1B12!important;font-weight:700;background:#FFF1E4;border:2px solid #F0A43A;border-radius:7px;padding:6px 10px;min-height:0!important}
+  position:relative;margin-top:10px;height:auto!important;padding:18px 16px 16px!important;border-radius:14px!important;
+  font:900 21px/1 Inter,system-ui,sans-serif!important;letter-spacing:.12em;text-transform:uppercase;color:#5E1F06!important;
+  text-shadow:0 1px 0 rgba(255,214,180,.6),0 -1px 0 rgba(80,20,0,.35);
+  border:1px solid #6A2A08!important;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22300%22%20height%3D%22120%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.035%200.06%22%20numOctaves%3D%223%22%20seed%3D%224%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.55%20%200%200%200%200%200.16%20%200%200%200%200%200.02%20%200%200%200%20-1.3%200.75%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url%28%23n%29%22/%3E%3C/svg%3E") 0 0/300px 120px,linear-gradient(180deg,#FBA56A 0%,#F2823F 30%,#E8682B 68%,#CF5420 100%)!important;
+  background-blend-mode:multiply,normal;
+  box-shadow:0 0 0 4px #2B190C,0 0 0 5.5px rgba(255,214,170,.16),inset 0 2px 0 rgba(255,236,214,.55),inset 0 -5px 10px rgba(120,32,0,.35),inset 0 0 0 1px rgba(255,190,140,.35),0 10px 16px rgba(10,4,0,.35)!important;
+  transition:transform .08s ease,filter .15s ease}
+[data-es-bg] .login-box .btn.primary::after,[data-es-bg] .login-box .btn.bloco::after{content:"";position:absolute;left:10px;right:10px;top:4px;height:38%;border-radius:10px 10px 30px 30px;
+  background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0));pointer-events:none}
+[data-es-bg] .login-box .btn.primary:hover,[data-es-bg] .login-box .btn.bloco:hover{filter:brightness(1.06) saturate(1.05)}
+[data-es-bg] .login-box .btn.primary:active,[data-es-bg] .login-box .btn.bloco:active{transform:translateY(2px);filter:brightness(.97)}
+/* rodapé: contato com o gestor (WhatsApp) */
+[data-es-bg] .login-box .help{color:#EBD6B8!important;border-top:1.5px dashed rgba(241,221,191,.35);margin-top:26px!important;padding-top:20px;text-align:center;
+  text-shadow:0 1px 2px rgba(10,4,0,.9);font-size:15px}
+[data-es-bg] .login-box .help > span{color:#D9C2A2!important;display:inline-block;margin-top:10px;font-size:12px!important}
+.es-wa{display:inline-flex;text-align:left;font-size:14.5px;align-items:center;gap:8px;color:#F6E6CF;text-decoration:none;font-weight:600;padding:6px 10px;border-radius:8px;transition:background .15s,color .15s}
+.es-wa:hover,.es-wa:focus-visible{background:rgba(255,236,210,.10);color:#fff;text-decoration:underline;text-underline-offset:3px}
+.es-wa svg{width:20px;height:20px;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+[data-es-bg] .login-box .erro{color:#9E1B12!important;font-weight:700;background:#FBF1E4;border:1px solid #1E1007;box-shadow:0 0 0 3px #2B190C;border-radius:9px;padding:8px 12px;margin-top:16px!important;min-height:0!important;text-shadow:none}
 [data-es-bg] .login-box .erro:empty{display:none}
-[data-es-bg] .login-box .note{background:#FFF1E4!important;border-color:#F0A43A!important}
-@media (max-width:700px){[data-es-bg] .login-box{padding:26px 22px 22px!important}[data-es-bg] .login-box h1{font-size:26px!important}}
-@media (max-height:640px) and (min-width:961px){
-  .es-placa-slot{width:220px;margin:14px auto 14px}
-  [data-es-bg] .login-box{padding:20px 26px 16px!important}
-  [data-es-bg] .login-box h1{font-size:25px!important}
-  [data-es-bg] .login-box .fld,[data-es-bg] .login-box .campo{margin-bottom:10px}
-  [data-es-bg] .login-box .help{margin-top:10px;padding-top:8px}
+[data-es-bg] .login-box .note{background:#FBF1E4!important;border-color:#2B190C!important;color:#2A1A0E}
+@media (max-width:700px){
+  [data-es-bg] .login-box{padding:38px 26px 30px!important}
+  [data-es-bg] .login-box h1{font-size:28px!important}
+  [data-es-bg] .login-box > p{font-size:15px!important}
 }
+@media (max-height:700px) and (min-width:961px){
+  .es-placa-slot{width:210px;margin:12px auto 12px}
+  [data-es-bg] .login-box{padding:30px 34px 24px!important}
+  [data-es-bg] .login-box h1{font-size:28px!important}
+  [data-es-bg] .login-box > p{font-size:15px!important;margin-top:6px!important}
+  [data-es-bg] .login-box .fld,[data-es-bg] .login-box .campo{margin-bottom:12px}
+  [data-es-bg] .login-box form > .fld:first-of-type,[data-es-bg] .login-box h1 + p + .campo{margin-top:16px}
+  [data-es-bg] .login-box .inp,[data-es-bg] .login-box input{height:44px!important}
+  [data-es-bg] .login-box .btn.primary,[data-es-bg] .login-box .btn.bloco{padding:14px 16px 12px!important;font-size:19px!important}
+  [data-es-bg] .login-box .help{margin-top:16px!important;padding-top:12px;font-size:14px}
+  [data-es-bg] .login-box .help > span{margin-top:4px}
+}
+
+/* telas baixas: tudo cabe sem cortar */
+@media (max-height:640px) and (min-width:961px){
+  .es-placa-slot{width:170px;margin:8px auto 8px}
+  [data-es-bg] .login-box{padding:26px 50px 20px!important}
+  [data-es-bg] .login-box h1{font-size:24px!important}
+  [data-es-bg] .login-box > p{font-size:13.5px!important;margin-top:4px!important}
+  [data-es-bg] .login-box .lbl,[data-es-bg] .login-box .campo label{margin-bottom:5px}
+  [data-es-bg] .login-box .fld,[data-es-bg] .login-box .campo{margin-bottom:8px}
+  [data-es-bg] .login-box form > .fld:first-of-type,[data-es-bg] .login-box h1 + p + .campo{margin-top:10px}
+  [data-es-bg] .login-box .inp,[data-es-bg] .login-box input{height:40px!important}
+  [data-es-bg] .login-box .btn.primary,[data-es-bg] .login-box .btn.bloco{padding:11px 16px 9px!important;font-size:17px!important;margin-top:6px}
+  [data-es-bg] .login-box .help{margin-top:10px!important;padding-top:6px}
+  [data-es-bg] .login-box .help > span,[data-es-bg] .login-box .help br{display:none}
+}
+@media (max-width:700px){[data-es-bg]{padding-bottom:78px!important}}
