@@ -65,3 +65,14 @@
   .es-sol,.es-agua{animation:none!important}
   .es-par,.es-sol,.es-bokeh{transform:none!important}
 }
+/* Computador: login à esquerda, paisagem livre à direita */
+@media (min-width:961px){
+  .login[data-es-bg]{justify-items:start;padding-left:clamp(32px,6vw,110px)!important}
+  .login[data-es-bg] .login-form{width:400px;align-items:center}
+  #login[data-es-bg]{display:grid;grid-template-columns:min(400px,100%);justify-content:start;align-content:center;justify-items:center;padding-left:clamp(32px,6vw,110px)}
+  #login[data-es-bg].oculto{display:none}
+  #login[data-es-bg] .login-box{max-width:none}
+  .es-shade::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(45,14,0,.42) 0%,rgba(45,14,0,.18) 32%,rgba(45,14,0,0) 55%)}
+  .es-leg{left:auto;right:28px;bottom:22px;text-align:right}
+  .es-dots{justify-content:flex-end}
+}
