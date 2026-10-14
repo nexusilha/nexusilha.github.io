@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap");
 /* =====================================================================
    Fundo do login — paisagens do Espírito Santo (Gestão de Insumos)
    Compartilhado pelo portal (Estoque Seco) e pelo módulo Câmara Fria.
@@ -90,3 +91,54 @@
 .es-anel{position:absolute;top:-10px;width:22px;height:22px;background-size:22px 22px;z-index:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
 @media (max-width:700px){.es-placa-slot{width:250px;margin:26px auto 20px}}
 @media (max-height:640px) and (min-width:961px){.es-placa-slot{width:250px;margin:22px auto 16px}}
+
+/* =====================================================================
+   Prancha do login (mesma estética da placa): madeira clara lixada,
+   moldura de madeira escura, pregos nos cantos. Campos continuam
+   brancos e lisos para leitura; nada se mexe enquanto se digita.
+   ===================================================================== */
+[data-es-bg] .login-box{
+  --prego:radial-gradient(circle at 42% 38%,#E2B98A 0,#A8754A 1.6px,#6B4426 3.2px,#3B2210 5px,rgba(40,20,5,.0) 6px);
+  position:relative;border:11px solid transparent!important;border-radius:14px!important;overflow:visible!important;
+  background:
+    var(--prego) left 1px top 1px/14px 14px no-repeat border-box,
+    var(--prego) right 1px top 1px/14px 14px no-repeat border-box,
+    var(--prego) left 1px bottom 1px/14px 14px no-repeat border-box,
+    var(--prego) right 1px bottom 1px/14px 14px no-repeat border-box,
+    repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 95px,rgba(110,62,24,.22) 95px 96px,rgba(255,255,255,.35) 96px 97px) padding-box,
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22520%22%20height%3D%22260%22%3E%3Cfilter%20id%3D%22n%22%20x%3D%220%22%20y%3D%220%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.0028%200.075%22%20numOctaves%3D%224%22%20seed%3D%227%22%20stitchTiles%3D%22stitch%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.45%20%200%200%200%200%200.26%20%200%200%200%200%200.10%20%200%200%200%20-1.25%200.74%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url%28%23n%29%22/%3E%3C/svg%3E") 0 0/520px 260px padding-box,
+    linear-gradient(170deg,#FBF0DC 0%,#F4E2C2 55%,#EED6AE 100%) padding-box,
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22520%22%20height%3D%22260%22%3E%3Cfilter%20id%3D%22n%22%20x%3D%220%22%20y%3D%220%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.005%200.22%22%20numOctaves%3D%223%22%20seed%3D%223%22%20stitchTiles%3D%22stitch%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.16%20%200%200%200%200%200.08%20%200%200%200%200%200.02%20%200%200%200%20-1.8%201.25%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url%28%23n%29%22/%3E%3C/svg%3E") 0 0/520px 260px border-box,
+    linear-gradient(160deg,#8A5530 0%,#6E4020 50%,#5A3216 100%) border-box!important;
+  box-shadow:0 30px 70px rgba(40,12,0,.5),0 3px 8px rgba(40,12,0,.3),inset 0 0 0 1px rgba(60,30,10,.35),inset 0 2px 10px rgba(90,50,15,.25)!important;
+  padding:24px 26px 22px!important}
+[data-es-bg] .login-box h1{font:800 27px/1.1 "Baloo 2",Inter,system-ui,sans-serif!important;color:#A63E05!important;letter-spacing:.005em;
+  text-shadow:0 1px 0 rgba(255,255,255,.6)}
+[data-es-bg] .login-box > p{color:#6E4A2A!important;font-weight:500;margin-top:2px}
+[data-es-bg] .login-box .lbl,[data-es-bg] .login-box .campo label{color:#5A3A1E!important;font-weight:600!important}
+[data-es-bg] .login-box .inp,[data-es-bg] .login-box input{background:#FFFDF8!important;border:1px solid #D7B98E!important;border-radius:8px!important;
+  box-shadow:inset 0 1px 2px rgba(110,62,24,.12)!important;color:#2A1A0E}
+[data-es-bg] .login-box .inp:focus,[data-es-bg] .login-box input:focus{border-color:#E55C0E!important;box-shadow:0 0 0 3px rgba(229,92,14,.22),inset 0 1px 2px rgba(110,62,24,.1)!important;outline:none}
+[data-es-bg] .login-box .pw-eye{color:#9C7A58}
+[data-es-bg] .login-box .pw-eye:hover{color:#E55C0E;background:rgba(229,92,14,.1)}
+/* Botão Entrar: ripa laranja pintada */
+[data-es-bg] .login-box .btn.primary,[data-es-bg] .login-box .btn.bloco{
+  font:700 17px "Baloo 2",Inter,system-ui,sans-serif!important;letter-spacing:.02em;color:#fff!important;
+  border:0!important;border-radius:9px!important;border-bottom:3px solid #A63E05!important;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22520%22%20height%3D%22260%22%3E%3Cfilter%20id%3D%22n%22%20x%3D%220%22%20y%3D%220%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.006%200.3%22%20numOctaves%3D%223%22%20seed%3D%2211%22%20stitchTiles%3D%22stitch%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%201%20%200%200%200%200%200.85%20%200%200%200%200%200.6%20%200%200%200%20-1.1%200.6%22/%3E%3C/filter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url%28%23n%29%22/%3E%3C/svg%3E") 0 0/520px 260px,linear-gradient(180deg,#F58A2A 0%,#E55C0E 55%,#D24F0A 100%)!important;
+  background-blend-mode:soft-light,normal;
+  text-shadow:0 1px 1px rgba(120,40,0,.45);box-shadow:0 4px 10px rgba(166,62,5,.3),inset 0 1px 0 rgba(255,255,255,.3)!important;
+  transition:transform .08s ease,filter .15s ease}
+[data-es-bg] .login-box .btn.primary:hover,[data-es-bg] .login-box .btn.bloco:hover{filter:brightness(1.06)}
+[data-es-bg] .login-box .btn.primary:active,[data-es-bg] .login-box .btn.bloco:active{transform:translateY(2px);border-bottom-width:1px!important}
+[data-es-bg] .login-box .help{color:#7A5A3C!important;border-top:1px dashed rgba(110,62,24,.3);padding-top:12px}
+[data-es-bg] .login-box .help span{color:#94785B}
+[data-es-bg] .login-box .erro{color:#B3261E!important;font-weight:600}
+@media (max-width:700px){[data-es-bg] .login-box{border-width:9px!important;padding:20px 20px 18px!important}[data-es-bg] .login-box h1{font-size:24px!important}}
+@media (max-height:640px) and (min-width:961px){
+  .es-placa-slot{width:220px;margin:14px auto 14px}
+  [data-es-bg] .login-box{padding:16px 22px 14px!important}
+  [data-es-bg] .login-box h1{font-size:23px!important}
+  [data-es-bg] .login-box .fld,[data-es-bg] .login-box .campo{margin-bottom:10px}
+  [data-es-bg] .login-box .help{margin-top:10px;padding-top:8px}
+}

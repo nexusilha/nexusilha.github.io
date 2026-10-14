@@ -220,6 +220,11 @@
           P.c[k].style.left = (P.x0 + g * P.w - 8) + 'px';
           P.c[k].style.height = (P.L + 4) + 'px';
         });
+        if (P.card) {
+          var cr = P.card.getBoundingClientRect();
+          P.cx = cr.left - hr.left; P.cy = cr.top - hr.top;
+          GANCHO.forEach(function (g, k) { P.r[k].style.left = (P.x0 + g * P.w - P.cx - 10 - 11) + 'px'; });
+        }
         desenhar();
       }
       P.medir = medir;
@@ -265,6 +270,13 @@
       P.tab.style.transform = 'translate3d(' + (P.x0 + dx).toFixed(2) + 'px,' + (L - dy).toFixed(2) + 'px,0) rotate(' + tilt.toFixed(2) + 'deg)';
       var g = (-th * 180 / Math.PI).toFixed(3);
       P.c[0].style.transform = P.c[1].style.transform = 'rotate(' + g + 'deg)';
+      if (P.card) GANCHO.forEach(function (gx, k) {
+        var ax = P.x0 + dx + gx * P.w, ay = L - dy + P.h * 0.9;
+        var bx = P.x0 + gx * P.w, by = P.cy - 4;
+        var vx = bx - ax, vy = by - ay, len = Math.sqrt(vx * vx + vy * vy);
+        var cn = P.k[k]; cn.style.left = (ax - 8) + 'px'; cn.style.top = ay + 'px'; cn.style.height = len + 'px';
+        cn.style.transform = 'rotate(' + (-Math.atan2(vx, vy) * 180 / Math.PI).toFixed(3) + 'deg)';
+      });
     }
 
     function passo(t) {
@@ -295,6 +307,7 @@
         window.removeEventListener('resize', P.medir);
         if (P.raiz && P.raiz.isConnected) P.raiz.remove();
         if (P.slot && P.slot.isConnected) P.slot.remove();
+        (P.r || []).forEach(function (r) { if (r.isConnected) r.remove(); });
         host.classList.remove('es-com-placa');
       }
     };
