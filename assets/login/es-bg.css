@@ -94,9 +94,9 @@
 
 
 /* Contato com o gestor (WhatsApp) no rodapé do cartão de login */
-.es-wa{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap;color:#C84B07;text-decoration:none;font-weight:600;padding:4px 8px;border-radius:6px;transition:background .15s}
+.es-wa{display:inline-flex;align-items:center;gap:6px;font-size:13px;text-align:left;color:#C84B07;text-decoration:none;font-weight:600;padding:4px 8px;border-radius:6px;transition:background .15s}
 .es-wa:hover,.es-wa:focus-visible{background:#FFF3E3;text-decoration:underline;text-underline-offset:3px}
 .es-wa svg{width:18px;height:18px;flex:none}
 @media (max-width:700px){[data-es-bg]{padding-bottom:78px!important}}
 #login .login-box .help{text-align:center;margin-top:14px;font-size:13px;color:#8A7766;line-height:1.5}
-@media (max-width:360px){.es-wa{white-space:normal}}
+
