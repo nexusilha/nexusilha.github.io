@@ -2,7 +2,7 @@
    - Páginas: rede primeiro (sempre a versão mais nova); sem internet, usa a última cópia ou a tela "sem conexão".
    - Arquivos estáticos e bibliotecas de CDN: cache com atualização em segundo plano.
    - Nunca guarda chamadas ao Supabase (dados e login sempre ao vivo). */
-const VERSAO = 'gi-v2';
+const VERSAO = 'gi-v3';
 const ESSENCIAIS = ['/offline.html', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png'];
 const CDN = ['cdn.jsdelivr.net', 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 

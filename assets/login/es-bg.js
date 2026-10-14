@@ -11,18 +11,61 @@
   if (window.ESBG) return;
   var me = document.currentScript;
   var BASE = me && me.src ? me.src.replace(/[^\/]*$/, '') : '/assets/login/';
-  var CENAS = [
-    { f: 'convento', pos: '70% 50%', nome: 'Convento da Penha · Baía de Vitória', agua: true,
-      autor: 'Elcio Alvares', lic: 'CC BY 2.0', pag: 'Terceira_Ponte_(10038703316).jpg' },
-    { f: 'por-do-sol', pos: '50% 45%', nome: 'Pôr do sol em Vitória, visto do Convento', agua: true,
-      autor: 'Alessandro Mesquita', lic: 'CC BY-SA 3.0', pag: 'Vitória,_no_Espírito_Santo,_vista_do_Convento_da_Penha.jpg' },
-    { f: 'ponte', pos: '58% 50%', nome: 'Terceira Ponte · Vitória e Vila Velha', agua: true,
-      autor: 'LucFreitas', lic: 'CC BY-SA 4.0', pag: 'Terceira_Ponte_vista_do_Convento.jpg' },
-    { f: 'pedra-azul', pos: '62% 40%', nome: 'Pedra Azul · Domingos Martins', agua: false,
-      autor: 'Marcio Malacarne', lic: 'CC BY-SA 4.0', pag: 'Pedra_Azul_-Largato.jpg' },
-    { f: 'enseada', pos: '62% 55%', nome: 'Barcos de pesca · Enseada do Suá', agua: true,
-      autor: 'Jsilvares', lic: 'CC BY-SA 4.0', pag: 'Enseada_do_suá_vitória_espírito_santo.jpg' }
-  ];
+  /* Cenas por período do dia. A primeira de cada período é a mesma região
+     (Terceira Ponte / Baía de Vitória), para a troca parecer a mesma
+     paisagem mudando de luz ao longo do dia. */
+  var CENAS = {
+    manha: [
+      { f: 'ponte', pos: '58% 50%', nome: 'Terceira Ponte · Baía de Vitória', agua: true,
+        autor: 'LucFreitas', lic: 'CC BY-SA 4.0', pag: 'Terceira_Ponte_vista_do_Convento.jpg' },
+      { f: 'convento', pos: '70% 50%', nome: 'Convento da Penha · Baía de Vitória', agua: true,
+        autor: 'Elcio Alvares', lic: 'CC BY 2.0', pag: 'Terceira_Ponte_(10038703316).jpg' },
+      { f: 'camburi', pos: '45% 60%', nome: 'Praia de Camburi · Vitória', agua: true,
+        autor: 'Vilamir Azevedo', lic: 'CC BY-SA 3.0', pag: 'Praia_de_Camburi_-_Vitória-ES_-_panoramio_(1).jpg' },
+      { f: 'pedra-azul', pos: '62% 40%', nome: 'Pedra Azul · Domingos Martins', agua: false,
+        autor: 'Marcio Malacarne', lic: 'CC BY-SA 4.0', pag: 'Pedra_Azul_-Largato.jpg' },
+      { f: 'enseada', pos: '62% 55%', nome: 'Barcos de pesca · Enseada do Suá', agua: true,
+        autor: 'Jsilvares', lic: 'CC BY-SA 4.0', pag: 'Enseada_do_suá_vitória_espírito_santo.jpg' }
+    ],
+    tarde: [
+      { f: 'ponte-tarde', pos: '50% 55%', nome: 'Terceira Ponte ao entardecer', agua: true,
+        autor: 'EvertonDroneMan', lic: 'CC BY-SA 4.0', pag: 'Pôr_do_Sol_na_Grande_Vitória.jpg' },
+      { f: 'por-do-sol', pos: '50% 45%', nome: 'Pôr do sol em Vitória, visto do Convento', agua: true,
+        autor: 'Alessandro Mesquita', lic: 'CC BY-SA 3.0', pag: 'Vitória,_no_Espírito_Santo,_vista_do_Convento_da_Penha.jpg' },
+      { f: 'ilha-do-boi', pos: '68% 55%', nome: 'Fim de tarde na Ilha do Boi · Vitória', agua: true,
+        autor: 'Eugênio Prado', lic: 'CC BY-SA 4.0', pag: 'Ilha_do_Boi_-_Vitória_ES.jpg' }
+    ],
+    noite: [
+      { f: 'ponte-noite', pos: '40% 60%', nome: 'Terceira Ponte iluminada · Vitória', agua: true,
+        autor: 'Vitor Jubini / MTur', lic: 'Domínio público', pag: 'VitorJubini_TerceiraPonte_Vitoria_ES_(27121005458).jpg' },
+      { f: 'penedo-noite', pos: '55% 55%', nome: 'Penedo à noite · Baía de Vitória', agua: true,
+        autor: 'MarcoXavier2005', lic: 'CC BY-SA 3.0', pag: 'Penedo_à_noite,_Vitória,_Espírito_Santo_-_panoramio_(2).jpg' },
+      { f: 'farol-noite', pos: '50% 62%', nome: 'Farol de Santa Luzia · Vila Velha', agua: true,
+        autor: 'Tavelini', lic: 'CC BY-SA 4.0', pag: 'Farol_a_noite_com_vista_de_Vitória_ao_Fundo.jpg' },
+      { f: 'pedra-azul-noite', pos: '55% 70%', nome: 'Pedra Azul sob a Via Láctea', agua: false,
+        autor: 'VITORBBARBOSA', lic: 'CC BY-SA 4.0', pag: 'PEDRA_AZUL_-_ES_-_VITOR_B._BARBOSA_-_FOTO_01.jpg' }
+    ]
+  };
+  var FUSO = 'America/Sao_Paulo';
+  /* Hora e minuto em Brasília, independente do fuso do aparelho.
+     Sem suporte a fusos no navegador: UTC−3 (Brasília não tem horário de verão desde 2019). */
+  function horaBrasilia(data) {
+    try {
+      var partes = new Intl.DateTimeFormat('en-GB', { timeZone: FUSO, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(data);
+      var h = +partes.filter(function (x) { return x.type === 'hour'; })[0].value % 24;
+      var m = +partes.filter(function (x) { return x.type === 'minute'; })[0].value;
+      if (!isNaN(h) && !isNaN(m)) return { h: h, m: m };
+    } catch (e) {}
+    var u = new Date(data.getTime() - 3 * 3600e3);
+    return { h: u.getUTCHours(), m: u.getUTCMinutes() };
+  }
+  // manhã 05:00–11:59 · tarde 12:00–17:59 · noite 18:00–04:59
+  function periodo(data) {
+    var h = horaBrasilia(data || agora()).h;
+    return h >= 5 && h < 12 ? 'manha' : h >= 12 && h < 18 ? 'tarde' : 'noite';
+  }
+  // relógio: o do aparelho; window.ESBG_RELOGIO só existe em testes automatizados
+  function agora() { return typeof window.ESBG_RELOGIO === 'function' ? window.ESBG_RELOGIO() : new Date(); }
   var DUR = 9000;
   var mq = function (q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } };
   var calmo = mq('(prefers-reduced-motion: reduce)');
@@ -37,18 +80,25 @@
     if (atual) desmontar();
     var bg = el('div', 'es-bg'); bg.setAttribute('aria-hidden', 'true');
     var par = el('div', 'es-par');
-    var cenas = CENAS.map(function (c) { var d = el('div', 'es-scene'); d.style.backgroundPosition = c.pos; par.appendChild(d); return { c: c, d: d, ok: false, carregando: false }; });
+    var per = periodo();
+    function criarCenas(lista) {
+      return lista.map(function (c) { var d = el('div', 'es-scene'); d.style.backgroundPosition = c.pos; par.appendChild(d); return { c: c, d: d, ok: false, carregando: false }; });
+    }
+    var cenas = criarCenas(CENAS[per]);
+    // luz ambiente: uma camada por período, trocadas por opacidade (transição suave)
     var tint = el('div', 'es-tint'), shade = el('div', 'es-shade'), sol = el('div', 'es-sol'), agua = el('div', 'es-agua');
+    var lua = el('div', 'es-lua'), noiteTint = el('div', 'es-tint-noite'), manhaTint = el('div', 'es-tint-manha');
     var b1 = el('div', 'es-bokeh b1'), b2 = el('div', 'es-bokeh b2');
     var cv = el('canvas', 'es-part');
     var leg = el('div', 'es-leg'); leg.removeAttribute('aria-hidden');
     var dots = el('div', 'es-dots'), lt = el('b'), lc = el('small');
     leg.appendChild(dots); leg.appendChild(lt); leg.appendChild(lc);
-    [par, tint, agua, sol, shade, b1, b2, cv].forEach(function (x) { bg.appendChild(x); });
+    [par, tint, manhaTint, noiteTint, agua, sol, lua, shade, b1, b2, cv].forEach(function (x) { bg.appendChild(x); });
+    bg.classList.add('es-' + per); bg.setAttribute('data-periodo', per);
     host.insertBefore(bg, host.firstChild);
     host.appendChild(leg);
 
-    var st = { host: host, bg: bg, leg: leg, cenas: cenas, idx: -1, timer: null, raf: 0, vivo: true,
+    var st = { host: host, bg: bg, leg: leg, cenas: cenas, per: per, idx: -1, timer: null, raf: 0, vivo: true,
                tx: 0, ty: 0, x: 0, y: 0, cv: cv, ctx: null, parts: [], t0: performance.now() };
     atual = st;
 
@@ -104,6 +154,39 @@
     }
     function visivel() { return host.isConnected && host.getClientRects().length > 0 && !document.hidden; }
 
+    /* Troca de período: carrega a primeira cena do novo período e só então
+       faz a transição (sem tela vazia). Se nenhuma foto do novo período
+       carregar, a cena atual continua — sempre há um fundo válido. */
+    function verificarPeriodo() {
+      if (!st.vivo) return;
+      var novo = periodo();
+      if (novo === st.per || st.trocando === novo) return;
+      st.trocando = novo;
+      var antigas = cenas, ativa = st.idx >= 0 ? antigas[st.idx] : null;
+      var lista = criarCenas(CENAS[novo]);
+      (function tentar(i) {
+        if (i >= lista.length) { lista.forEach(function (s) { s.d.remove(); }); st.trocando = null; return; }
+        var s = lista[i];
+        var img = new Image();
+        img.onload = function () {
+          if (!st.vivo) return;
+          s.d.style.backgroundImage = 'url("' + BASE + s.c.f + '-m.jpg")'; s.ok = true;
+          var g = new Image(); g.onload = function () { s.d.style.backgroundImage = 'url("' + BASE + s.c.f + '.jpg")'; }; g.src = BASE + s.c.f + '.jpg';
+          cenas = lista; st.cenas = lista; st.per = novo; st.trocando = null; st.idx = -1;
+          bg.classList.remove('es-manha', 'es-tarde', 'es-noite'); bg.classList.add('es-' + novo); bg.setAttribute('data-periodo', novo);
+          if (ativa) { ativa.d.classList.remove('on'); ativa.d.classList.add('sai'); }
+          mostrar(i); ciclo();
+          setTimeout(function () { antigas.forEach(function (x) { if (x.d.isConnected) x.d.remove(); }); }, 2300);
+        };
+        img.onerror = function () { s.falhou = true; tentar(i + 1); };
+        img.src = BASE + s.c.f + '-m.jpg';
+      })(0);
+    }
+    st.verificarPeriodo = verificarPeriodo;
+    st.relogio = setInterval(verificarPeriodo, 30000); // só calcula a hora; não baixa nada
+    st.onVis = function () { if (!document.hidden) verificarPeriodo(); };
+    document.addEventListener('visibilitychange', st.onVis);
+
     // primeira cena; se falhar, tenta as seguintes; sem nenhuma, fica o laranja
     (function inicio(i) {
       if (i >= cenas.length) { leg.style.display = 'none'; return; }
@@ -147,7 +230,8 @@
         var al = p.a * (.6 + .4 * Math.sin(p.f * 1.7)) * Math.min(1, (1.05 - p.y) * 4);
         var r = p.r * d * (1 + p.z);
         var g = c.createRadialGradient(px, py, 0, px, py, r * 3);
-        g.addColorStop(0, 'rgba(255,226,170,' + al + ')'); g.addColorStop(1, 'rgba(255,170,60,0)');
+        if (st.per === 'noite') { g.addColorStop(0, 'rgba(225,235,255,' + al + ')'); g.addColorStop(1, 'rgba(160,190,255,0)'); }
+        else { g.addColorStop(0, 'rgba(255,226,170,' + al + ')'); g.addColorStop(1, 'rgba(255,170,60,0)'); }
         c.fillStyle = g; c.beginPath(); c.arc(px, py, r * 3, 0, 6.2832); c.fill();
       }
     }
@@ -315,7 +399,8 @@
 
   function desmontar() {
     var st = atual; if (!st) return;
-    st.vivo = false; clearTimeout(st.timer); cancelAnimationFrame(st.raf);
+    st.vivo = false; clearTimeout(st.timer); cancelAnimationFrame(st.raf); clearInterval(st.relogio);
+    document.removeEventListener('visibilitychange', st.onVis);
     window.removeEventListener('pointermove', st.onMove); window.removeEventListener('resize', st.onResize);
     if (st.placa) st.placa.destruir();
     if (st.bg.isConnected) st.bg.remove(); if (st.leg.isConnected) st.leg.remove();
@@ -328,7 +413,8 @@
     if (h && (!atual || atual.host !== h)) { try { montar(h); } catch (e) { /* fundo é opcional */ } }
   }
 
-  window.ESBG = { montar: montar, desmontar: desmontar, varrer: varrer };
+  window.ESBG = { montar: montar, desmontar: desmontar, varrer: varrer, periodo: periodo, horaBrasilia: horaBrasilia, cenas: CENAS,
+    verificar: function () { if (atual && atual.verificarPeriodo) atual.verificarPeriodo(); } };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', varrer); else varrer();
   // a tela de login do portal é recriada a cada saída; observa e monta de novo
   var pend = false;

@@ -100,3 +100,23 @@
 @media (max-width:700px){[data-es-bg]{padding-bottom:78px!important}}
 #login .login-box .help{text-align:center;margin-top:14px;font-size:13px;color:#8A7766;line-height:1.5}
 
+/* =====================================================================
+   Luz ambiente por período (horário de Brasília): manhã, tarde, noite.
+   Só muda a iluminação sobre a foto; placa, cartão e efeitos ficam iguais.
+   ===================================================================== */
+.es-tint,.es-tint-manha,.es-tint-noite,.es-lua{transition:opacity 2s ease}
+.es-tint-manha{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:0;
+  background:linear-gradient(180deg,#FFF1D6 0%,#FFD9A0 55%,#F7B45A 100%)}
+.es-tint-noite{position:absolute;inset:0;mix-blend-mode:soft-light;opacity:0;
+  background:linear-gradient(180deg,#0E1A3A 0%,#1C2C5C 45%,#6A3A2A 85%,#E55C0E 100%)}
+.es-lua{position:absolute;width:46vmax;height:46vmax;right:-10vmax;top:-22vmax;border-radius:50%;opacity:0;mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(210,225,255,.30) 0%,rgba(170,195,255,.10) 35%,rgba(150,180,255,0) 68%);
+  transform:translate3d(calc(var(--px) * -24px),calc(var(--py) * -16px),0)}
+.es-manha .es-tint{opacity:.38}
+.es-manha .es-tint-manha{opacity:.55}
+.es-manha .es-sol{animation:none;opacity:.55}
+.es-noite .es-tint{opacity:.22}
+.es-noite .es-tint-noite{opacity:.7}
+.es-noite .es-sol{animation:none;opacity:0}
+.es-noite .es-lua{opacity:1}
+.es-noite .es-bokeh{opacity:.28}
