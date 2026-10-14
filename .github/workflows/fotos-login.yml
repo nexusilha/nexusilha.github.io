@@ -1,0 +1,46 @@
+name: Baixar fotos do login (Wikimedia Commons)
+on:
+  push:
+    branches: [fetch-fotos-2]
+permissions:
+  contents: write
+jobs:
+  fotos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - run: pip install pillow
+      - name: Baixar e otimizar
+        run: |
+          mkdir -p assets/login
+          python3 - <<'PY'
+          import urllib.request, urllib.parse, io
+          from PIL import Image
+          UA={'User-Agent':'GrupoIlha-GestaoInsumos/1.0 (nexusilha.github.io; build de assets)'}
+          F={'camburi':('Praia de Camburi - Vitória-ES - panoramio (1).jpg',1920,1920),
+             'ponte-tarde':('Pôr do Sol na Grande Vitória.jpg',1920,1920),
+             'ilha-do-boi':('Ilha do Boi - Vitória ES.jpg',1920,1920),
+             'ponte-por-do-sol':('Por do sol na Terceira Ponte ES.jpg',3840,2400),
+             'ponte-noite':('VitorJubini TerceiraPonte Vitoria ES (27121005458).jpg',1920,1920),
+             'penedo-noite':('Penedo à noite, Vitória, Espírito Santo - panoramio (2).jpg',1600,1600),
+             'farol-noite':('Farol a noite com vista de Vitória ao Fundo.jpg',1920,1920),
+             'pedra-azul-noite':('PEDRA AZUL - ES - VITOR B. BARBOSA - FOTO 01.jpg',3840,2400)}
+          for k,(f,w,out) in F.items():
+              u='https://commons.wikimedia.org/wiki/Special:FilePath/'+urllib.parse.quote(f)+'?width='+str(w)
+              data=urllib.request.urlopen(urllib.request.Request(u,headers=UA),timeout=60).read()
+              im=Image.open(io.BytesIO(data)).convert('RGB')
+              if im.width>out: im=im.resize((out,round(im.height*out/im.width)),Image.LANCZOS)
+              im.save(f'assets/login/{k}.jpg','JPEG',quality=74,optimize=True,progressive=True)
+              sm=im.resize((960,round(im.height*960/im.width)),Image.LANCZOS)
+              sm.save(f'assets/login/{k}-m.jpg','JPEG',quality=70,optimize=True,progressive=True)
+              print(k,im.size)
+          PY
+          ls -la assets/login
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add assets/login
+          git commit -m "Fotos do login (Wikimedia Commons, licenças livres)" || exit 0
+          git push origin HEAD:main
