@@ -1,4 +1,5 @@
 SET check_function_bodies = false;
+
 ALTER TABLE public.almox_acessos ENABLE ROW LEVEL SECURITY;
 CREATE POLICY almox_acessos_del ON public.almox_acessos FOR DELETE TO authenticated USING (public.almox_gestor_unidade(unidade_id));
 CREATE POLICY almox_acessos_ins ON public.almox_acessos FOR INSERT TO authenticated WITH CHECK (public.almox_gestor_unidade(unidade_id));

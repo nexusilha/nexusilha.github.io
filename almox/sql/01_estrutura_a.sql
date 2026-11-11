@@ -1,4 +1,5 @@
 SET check_function_bodies = false;
+
 CREATE TYPE public.almox_bucket AS ENUM (
     'DISPONIVEL',
     'LAVANDERIA'

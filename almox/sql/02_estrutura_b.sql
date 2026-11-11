@@ -1,4 +1,5 @@
 SET check_function_bodies = false;
+
 CREATE FUNCTION public.almox_receber_lavanderia(p_remessa_id bigint, p_itens jsonb, p_custo numeric DEFAULT NULL::numeric, p_observacoes text DEFAULT NULL::text) RETURNS public.almox_remessas_lavanderia
     LANGUAGE plpgsql SECURITY DEFINER
     SET search_path TO 'public'
@@ -889,69 +890,3 @@ ALTER TABLE ONLY public.almox_tamanhos ALTER COLUMN id SET DEFAULT nextval('publ
 ALTER TABLE ONLY public.almox_treinamentos_epi ALTER COLUMN id SET DEFAULT nextval('public.almox_treinamentos_epi_id_seq'::regclass);
 ALTER TABLE ONLY public.almox_unidades ALTER COLUMN id SET DEFAULT nextval('public.almox_unidades_id_seq'::regclass);
 ALTER TABLE ONLY public.almox_variacoes ALTER COLUMN id SET DEFAULT nextval('public.almox_variacoes_id_seq'::regclass);
-CREATE OR REPLACE VIEW public.almox_vw_emprestimos WITH (security_invoker='on') AS
- SELECT e.id,
-    e.codigo,
-    e.status,
-    e.data_saida,
-    e.previsao_devolucao,
-    e.unidade_id,
-    e.motivo,
-    e.observacoes,
-    e.recibo_assinado,
-    e.assinado_em,
-    f.id AS funcionario_id,
-    f.nome AS funcionario,
-    f.matricula,
-    f.cargo,
-    f.setor,
-    f.termo_assinado_em,
-    (COALESCE(sum(ei.quantidade), (0)::bigint))::integer AS total_itens,
-    (COALESCE(sum((ei.quantidade - ei.quantidade_devolvida)), (0)::bigint))::integer AS pendentes,
-    (COALESCE(sum(((ei.quantidade)::numeric * ei.valor_unitario_reposicao)), (0)::numeric))::numeric(14,2) AS valor_reposicao,
-    (COALESCE(sum((((ei.quantidade - ei.quantidade_devolvida))::numeric * ei.valor_unitario_reposicao)), (0)::numeric))::numeric(14,2) AS valor_em_aberto,
-    ((e.status = ANY (ARRAY['ABERTO'::public.almox_status_emprestimo, 'PARCIAL'::public.almox_status_emprestimo])) AND (e.previsao_devolucao IS NOT NULL) AND (e.previsao_devolucao < CURRENT_DATE)) AS atrasado
-   FROM ((public.almox_emprestimos e
-     JOIN public.almox_funcionarios f ON ((f.id = e.funcionario_id)))
-     LEFT JOIN public.almox_emprestimo_itens ei ON ((ei.emprestimo_id = e.id)))
-  GROUP BY e.id, f.id;
-CREATE OR REPLACE VIEW public.almox_vw_entregas WITH (security_invoker='on') AS
- SELECT m.documento AS codigo,
-    min(m.data) AS data,
-    m.unidade_id,
-    f.id AS funcionario_id,
-    f.nome AS funcionario,
-    f.matricula,
-    f.cargo,
-    f.setor,
-    min(m.justificativa) AS motivo,
-    min(m.observacoes) AS observacoes,
-    (sum(m.quantidade))::integer AS total_pecas,
-    (count(*))::integer AS linhas,
-    bool_or(m.cancelada) AS tem_cancelamento,
-    min(u.nome) AS entregue_por
-   FROM ((public.almox_movimentacoes m
-     JOIN public.almox_funcionarios f ON ((f.id = m.funcionario_id)))
-     LEFT JOIN public.almox_usuarios u ON ((u.id = m.usuario_id)))
-  WHERE ((m.tipo = 'SAIDA_FUNCIONARIO'::public.almox_tipo_mov) AND (m.documento ~~ 'ENT-%'::text))
-  GROUP BY m.documento, m.unidade_id, f.id;
-CREATE OR REPLACE VIEW public.almox_vw_remessas WITH (security_invoker='on') AS
- SELECT r.id,
-    r.codigo,
-    r.status,
-    r.data_envio,
-    r.data_retorno,
-    r.custo,
-    r.observacoes,
-    r.unidade_id,
-    COALESCE(r.responsavel, f.nome) AS responsavel,
-    COALESCE(r.local, 'Lavanderia interna'::text) AS local,
-    (COALESCE(sum(ri.quantidade), (0)::bigint))::integer AS total_pecas,
-    (COALESCE(sum(ri.quantidade_retornada), (0)::bigint))::integer AS retornadas,
-    (COALESCE(sum(ri.quantidade_condenada), (0)::bigint))::integer AS condenadas,
-    (COALESCE(sum(((ri.quantidade - ri.quantidade_retornada) - ri.quantidade_condenada)), (0)::bigint))::integer AS pendentes,
-    ((r.status = 'ENVIADA'::public.almox_status_remessa) AND (r.data_envio < (now() - '4 days'::interval))) AS demorada
-   FROM ((public.almox_remessas_lavanderia r
-     LEFT JOIN public.almox_fornecedores f ON ((f.id = r.fornecedor_id)))
-     LEFT JOIN public.almox_remessa_itens ri ON ((ri.remessa_id = r.id)))
-  GROUP BY r.id, f.nome;
