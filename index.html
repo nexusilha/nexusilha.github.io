@@ -642,6 +642,7 @@ a.logo-link{display:inline-flex;align-items:center;text-decoration:none;color:in
 .mod .ico svg.i{width:26px;height:26px}
 .mod.seco .ico{background:#FFF0D9;color:#E98300}
 .mod.cmv .ico{background:#FDE7DA;color:#E55C0E}
+.mod.almox .ico{background:#FFF6C9;color:#B07A00}
 .mod.adm .ico{background:var(--mute-bg);color:var(--ink-2)}
 .mod h2{font:600 18px/1.25 var(--ff)}
 .mod p{color:var(--ink-2);font-size:14px;line-height:1.5}
@@ -681,7 +682,8 @@ const LOGO_SF='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmc
 // Endereços dos módulos (Câmara Fria continua no endereço atual até a Fase 3)
 const MODULOS={
   seco:{nome:'Estoque Seco',desc:'Requisições de Bar, Cozinha e Cumim: pedido, separação, entrega e consumo.',url:'./seco/',cls:'seco',icon:'box'},
-  cmv:{nome:'Câmara Fria · CMV · RNC',desc:'Câmaras, contagens, desvios, perdas, CMV de proteínas e não conformidades.',url:'https://nexusilha.github.io/nexusilha/',cls:'cmv',icon:'snow'}
+  cmv:{nome:'Câmara Fria · CMV · RNC',desc:'Câmaras, contagens, desvios, perdas, CMV de proteínas e não conformidades.',url:'https://nexusilha.github.io/nexusilha/',cls:'cmv',icon:'snow'},
+  almox:{nome:'Almoxarifado',desc:'Uniformes, calçados e EPI: estoque por tamanho, entregas, empréstimos, lavanderia e inventário.',url:'./almox/',cls:'almox',icon:'shirt'}
 };
 const OPERADOR_KEY='nexus.operador';
 const OPERADOR_TTL=14*3600*1000; // pede o nome de novo a cada turno (14 h)
@@ -691,8 +693,10 @@ const nx=sb.schema('nexus');
 const SETORES={bar:'Bar',cozinha:'Cozinha',cumim:'Cumim'};
 const SECO_ROLES={admin:'Gestor',estoquista:'Estoquista',setor:'Setor'};
 const CMV_PAPEIS={GESTOR:'Gestor',ESTOQUISTA:'Estoquista',LIDER:'Líder / Chef'};
+const ALMOX_PAPEIS={GESTOR:'Gestor',OPERADOR:'Operador',LEITURA:'Consulta'};
 const P={
  box:'<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+ shirt:'<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>',
  snow:'<path d="M12 2v20M4.9 6l14.2 12M4.9 18 19.1 6"/><path d="m9 4 3 2 3-2M9 20l3-2 3 2"/>',
  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/>',
  out:'<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4"/><path d="M10 17l-5-5 5-5M5 12h11"/>',
@@ -746,7 +750,7 @@ function getOperador(){
 }
 function setOperador(nome,funcionario_id){try{localStorage.setItem(OPERADOR_KEY,JSON.stringify({login_id:S.session.user.id,nome,funcionario_id:funcionario_id||null,ts:Date.now()}));}catch(e){}}
 function clearOperador(){try{localStorage.removeItem(OPERADOR_KEY);}catch(e){}}
-function loginNome(){const m=S.mods||{};return m.seco?.nome||m.cmv?.nome||S.session?.user?.email||'';}
+function loginNome(){const m=S.mods||{};return m.seco?.nome||m.cmv?.nome||m.almox?.nome||S.session?.user?.email||'';}
 function operadorNome(){return getOperador()?.nome||loginNome();}
 
 /* =====================================================================
@@ -760,7 +764,7 @@ async function start(session){
   const {data,error}=await nx.rpc('meus_modulos');
   if(error){renderLogin('Não foi possível carregar seus acessos: '+error.message);return;}
   S.mods=data||{};
-  if(!S.mods.seco&&!S.mods.cmv){await sb.auth.signOut({scope:'local'});renderLogin('Este login não tem acesso a nenhum módulo. Fale com o gestor.');return;}
+  if(!S.mods.seco&&!S.mods.cmv&&!S.mods.almox){await sb.auth.signOut({scope:'local'});renderLogin('Este login não tem acesso a nenhum módulo. Fale com o gestor.');return;}
   const f=await nx.from('funcionarios').select('id,nome').eq('login_id',session.user.id).eq('ativo',true).order('nome');
   S.funcs=f.data||[];
   route();
@@ -842,7 +846,7 @@ window.escolherPessoa=escolherPessoa;
 /* ---------- Módulos ---------- */
 function renderModulos(){
   const mods=modulosDisponiveis();
-  const papel=k=>k==='seco'?(SECO_ROLES[S.mods.seco.role]+(S.mods.seco.setor?' · '+SETORES[S.mods.seco.setor]:'')):CMV_PAPEIS[S.mods.cmv.papel];
+  const papel=k=>k==='seco'?(SECO_ROLES[S.mods.seco.role]+(S.mods.seco.setor?' · '+SETORES[S.mods.seco.setor]:'')):k==='almox'?(S.mods.almox.unidades>1?S.mods.almox.unidades+' unidades':'1 unidade'):CMV_PAPEIS[S.mods.cmv.papel];
   $('#app').innerHTML=`<div class="portal">${topBar()}<main class="p-body">
     <div class="p-hello"><h1>Olá, ${esc(operadorNome().split(' ')[0])}</h1><p>Escolha o módulo que você quer usar agora.</p></div>
     <div class="mods">
@@ -871,7 +875,7 @@ async function adminFn(corpo){
 async function renderAcessos(){
   if(!S.mods.gestor){renderModulos();return;}
   $('#app').innerHTML=`<div class="portal">${topBar()}<main class="p-body" style="max-width:1180px"><div class="empty"><div class="spin"></div>Carregando logins…</div></main></div>`;
-  try{S.users=(await adminFn({acao:'listar'})).users;}catch(e){toast(e.message,'err');S.users=[];}
+  try{const r=await adminFn({acao:'listar'});S.users=r.users;S.almoxUni=r.almox_unidades||[];}catch(e){toast(e.message,'err');S.users=[];S.almoxUni=[];}
   drawAcessos();
 }
 window.renderAcessos=renderAcessos;
@@ -879,6 +883,7 @@ function modBadges(u){
   const b=[];
   if(u.seco) b.push(`<span class="bdg ${u.seco.ativo?'b-brand':'b-mute'} nodot" title="Estoque Seco">Seco · ${esc(SECO_ROLES[u.seco.role])}${u.seco.setor?' '+esc(SETORES[u.seco.setor]):''}${u.seco.ativo?'':' (sem acesso)'}</span>`);
   if(u.cmv) b.push(`<span class="bdg ${u.cmv.ativo?'b-info':'b-mute'} nodot" title="Câmara Fria">Câmara · ${esc(CMV_PAPEIS[u.cmv.papel])}${u.cmv.ativo?'':' (sem acesso)'}</span>`);
+  if(u.almox) b.push(`<span class="bdg b-warn nodot" title="Almoxarifado">Almox · ${esc(ALMOX_PAPEIS[u.almox.papel])} · ${esc(u.almox.unidades.map(id=>(S.almoxUni||[]).find(x=>x.id===id)?.codigo||id).join(', '))}</span>`);
   return b.join(' ');
 }
 function drawAcessos(){
@@ -895,11 +900,11 @@ function drawAcessos(){
    <td data-l="Último acesso" class="tiny">${fmtRel(u.ultimo_login)}</td>
    <td class="acts"><button class="btn ghost sm" onclick="openUser('${u.id}')">${ic('edit')}Editar</button><button class="btn ghost sm" onclick="senhaUser('${u.id}')">${ic('key')}Senha</button>${eu?'':`<button class="btn ${u.ativo?'danger':'success'} sm" onclick="statusUser('${u.id}',${!u.ativo})">${ic('power')}${u.ativo?'Inativar':'Ativar'}</button>`}</td></tr>`;}).join('')}
   </tbody></table></div>`:`<div class="empty">Nenhum login encontrado.</div>`}</div>
-  <div class="card card-b" style="margin-top:16px"><p class="tiny" style="color:var(--ink-2)"><b style="color:var(--ink)">Como funciona.</b> Cada login tem acesso a um ou aos dois módulos, com um papel em cada. Em <b>Estoque Seco</b>: Gestor, Estoquista ou Setor (Bar, Cozinha, Cumim). Em <b>Câmara Fria</b>: Gestor, Estoquista ou Líder/Chef. Se o login tiver funcionários cadastrados, ao entrar a pessoa toca no próprio nome — e é esse nome que fica registrado. Login inativo não consegue entrar.</p></div>`;
+  <div class="card card-b" style="margin-top:16px"><p class="tiny" style="color:var(--ink-2)"><b style="color:var(--ink)">Como funciona.</b> Cada login tem acesso a um ou aos dois módulos, com um papel em cada. Em <b>Estoque Seco</b>: Gestor, Estoquista ou Setor (Bar, Cozinha, Cumim). Em <b>Câmara Fria</b>: Gestor, Estoquista ou Líder/Chef. No <b>Almoxarifado</b>: Gestor, Operador ou Consulta, nas unidades marcadas (VIX, VV, CD e CP). Se o login tiver funcionários cadastrados, ao entrar a pessoa toca no próprio nome — e é esse nome que fica registrado. Login inativo não consegue entrar.</p></div>`;
   const inp=$('#uq');inp.oninput=()=>{S.uq=inp.value;clearTimeout(inp._t);inp._t=setTimeout(()=>{const p=inp.selectionStart;drawAcessos();const n=$('#uq');n.focus();try{n.setSelectionRange(p,p);}catch(e){}},170);};
 }
 function userForm(u){
-  const s=u?.seco&&u.seco.ativo?u.seco:null, c=u?.cmv&&u.cmv.ativo?u.cmv:null;
+  const s=u?.seco&&u.seco.ativo?u.seco:null, c=u?.cmv&&u.cmv.ativo?u.cmv:null, a=u?.almox||null;
   return `<div class="stack">
    <div class="grid g2">
     <div class="fld"><label class="lbl">Nome do login</label><input class="inp" id="fN" value="${esc(u?.nome||'')}" placeholder="Ex.: Cozinha, Bar, João Azevedo" autofocus></div>
@@ -911,6 +916,9 @@ function userForm(u){
      <div class="fld" id="sTw"><label class="lbl">Setor</label><select class="inp" id="sT">${Object.entries(SETORES).map(([k,v])=>`<option value="${k}" ${s?.setor===k?'selected':''}>${v}</option>`).join('')}</select></div></div></div>
    <div class="mod-box"><label class="hd"><input type="checkbox" id="mC" ${c?'checked':''} style="width:18px;height:18px;accent-color:var(--brand)">${ic('snow')}Câmara Fria · CMV · RNC</label>
      <div class="grid g2" id="mCb"><div class="fld"><label class="lbl">Papel</label><select class="inp" id="cP">${Object.entries(CMV_PAPEIS).map(([k,v])=>`<option value="${k}" ${(c?.papel||'LIDER')===k?'selected':''}>${v}</option>`).join('')}</select></div></div></div>
+   <div class="mod-box"><label class="hd"><input type="checkbox" id="mA" ${a?'checked':''} style="width:18px;height:18px;accent-color:#B07A00">${ic('shirt')}Almoxarifado</label>
+     <div class="grid g2" id="mAb"><div class="fld"><label class="lbl">Papel</label><select class="inp" id="aP">${Object.entries(ALMOX_PAPEIS).map(([k,v])=>`<option value="${k}" ${(a?.papel||'OPERADOR')===k?'selected':''}>${v}</option>`).join('')}</select></div>
+     <div class="fld"><label class="lbl">Unidades</label><div class="chips-f" id="aU">${(S.almoxUni||[]).map(x=>`<label class="chip-f" style="cursor:pointer"><input type="checkbox" value="${x.id}" ${a?(a.unidades.includes(x.id)?'checked':''):(x.codigo==='VIX'?'checked':'')} style="accent-color:#B07A00">${esc(x.codigo)}</label>`).join('')||'<span class="tiny">Nenhuma unidade cadastrada.</span>'}</div></div></div></div>
    ${u?`<div class="mod-box"><div class="hd">${ic('users')}Funcionários deste login</div><p class="tiny" style="margin-top:-6px">Ao entrar, cada um toca no próprio nome. Sem funcionários, o nome do login é usado.</p>
      <div class="chips-f" id="fList">${funcChips(u)}</div>
      <div class="row"><input class="inp" id="fNovo" placeholder="Nome do funcionário"><button type="button" class="btn dark" id="fAdd">${ic('plus')}Adicionar</button></div></div>`:''}
@@ -922,8 +930,8 @@ function openUser(id){
   const m=openModal({size:'md',title:u?'Editar login':'Novo login',sub:u?esc(u.email):'Escolha os módulos e o papel em cada um.',body:userForm(u),
     foot:`<button class="btn ghost" data-x>${u?'Fechar':'Cancelar'}</button><button class="btn primary" id="fOk">${u?'Salvar':'Criar login'}</button>`});
   const el=s=>m.el.querySelector(s);
-  const sync=()=>{el('#mSb').style.display=el('#mS').checked?'':'none';el('#mCb').style.display=el('#mC').checked?'':'none';el('#sTw').style.visibility=el('#sR').value==='setor'?'visible':'hidden';};
-  ['#mS','#mC','#sR'].forEach(s=>el(s).onchange=sync);sync();
+  const sync=()=>{el('#mSb').style.display=el('#mS').checked?'':'none';el('#mCb').style.display=el('#mC').checked?'':'none';el('#mAb').style.display=el('#mA').checked?'':'none';el('#sTw').style.visibility=el('#sR').value==='setor'?'visible':'hidden';};
+  ['#mS','#mC','#mA','#sR'].forEach(s=>el(s).onchange=sync);sync();
   if(u){
     const add=async()=>{const n=el('#fNovo').value.trim();if(!n)return;
       if(u.funcionarios.some(f=>norm(f.nome)===norm(n)))return toast('Esse nome já está na lista.','err');
@@ -935,8 +943,10 @@ function openUser(id){
   el('#fOk').onclick=e=>busy(e.currentTarget,async()=>{
     const nome=el('#fN').value.trim(), email=el('#fE').value.trim().toLowerCase();
     if(!nome||!email) return toast('Preencha nome e e-mail.','err');
-    const modulos={seco:el('#mS').checked?{role:el('#sR').value,setor:el('#sR').value==='setor'?el('#sT').value:null}:null,cmv:el('#mC').checked?{papel:el('#cP').value}:null};
-    if(!modulos.seco&&!modulos.cmv) return toast('Marque ao menos um módulo.','err');
+    const modulos={seco:el('#mS').checked?{role:el('#sR').value,setor:el('#sR').value==='setor'?el('#sT').value:null}:null,cmv:el('#mC').checked?{papel:el('#cP').value}:null,
+      almox:el('#mA').checked?{papel:el('#aP').value,unidades:[...m.el.querySelectorAll('#aU input:checked')].map(i=>Number(i.value))}:null};
+    if(!modulos.seco&&!modulos.cmv&&!modulos.almox) return toast('Marque ao menos um módulo.','err');
+    if(modulos.almox&&!modulos.almox.unidades.length) return toast('No Almoxarifado, marque ao menos uma unidade.','err');
     try{
       if(u) await adminFn({acao:'editar',user_id:u.id,nome,email,modulos});
       else{const s=el('#fS').value;if(s.length<6)return toast('Senha com no mínimo 6 caracteres.','err');await adminFn({acao:'criar',nome,email,senha:s,modulos});}
