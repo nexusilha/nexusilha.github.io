@@ -360,6 +360,20 @@ th{font-size:11.5px;color:var(--ink-2);background:#FFF8EF}
   .content{padding:16px 14px 60px}
 }
 #unidadeBox{display:flex;align-items:center}
+@media(min-width:901px){.side{display:flex;flex-direction:column;height:100vh;position:sticky;top:0}.side .nav{flex:1 1 auto;overflow-y:auto;min-height:0}}
+.perm-card{margin-bottom:12px;padding:0}
+.perm-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
+.perm-h .avatar{background:#FFF1E2;color:#E55C0E}
+.perm-quem{flex:1;min-width:160px;line-height:1.3}.perm-quem b{display:block}.perm-quem span{font-size:12.5px;color:var(--ink-2)}
+.perm-nota{padding:12px 16px;font-size:13px;color:var(--ink-2)}
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;padding:12px 16px 14px}
+.perm{position:relative;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:#fff}
+.perm.on{border-color:#F6C590;background:#FFF8EF}
+.perm input{position:absolute;opacity:0;pointer-events:none}
+.perm .sw{flex:none;width:34px;height:20px;border-radius:20px;background:#E3D6C8;position:relative;margin-top:1px;transition:background .15s}
+.perm .sw::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:left .15s}
+.perm.on .sw{background:#E55C0E}.perm.on .sw::after{left:16px}
+.perm b{display:block;font-size:13.5px}.perm small{display:block;font-size:12px;color:var(--ink-2);line-height:1.35;margin-top:2px}
 #unidadeBox .tag{height:auto;padding:4px 11px;border-radius:999px;font-family:inherit;font-weight:700;font-size:12px;line-height:1.4}
 @media print{.mtop,.menu-fundo{display:none !important}}
 </style>
@@ -413,7 +427,7 @@ const CONFIG = {
   PORTAL: '../',
   SISTEMA: 'NEXUS — Almoxarifado',
   EMPRESA: 'Grupo Ilha',
-  VERSAO: '3.1.0'
+  VERSAO: '3.2.0'
 };
 
 const LOGO_SRC = 'data:image/png;base64,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';
@@ -518,6 +532,18 @@ function drawer({titulo, sub='', corpo}){
 const podeOperar = ()=> ['GESTOR','OPERADOR'].includes(S.papel);
 const ehGestor   = ()=> S.papel === 'GESTOR';
 const ehAdminSistema = ()=> !!S.perfil?.admin_sistema;
+// Funções que o gestor libera para cada operador (Logins e permissões)
+const PERMISSOES = [
+  ['funcionarios','Funcionários','Cadastrar, editar, desligar e reativar funcionários; registrar termo de EPI'],
+  ['catalogo','Uniformes e grades','Cadastrar e editar uniformes/itens, categorias, grades e tamanhos'],
+  ['estrutura','Setores, funções e dotação','Cadastrar setores, funções e regras de dotação'],
+  ['fornecedores','Fornecedores','Cadastrar e editar fornecedores'],
+  ['correcoes','Correções','Ajuste, descarte, cancelar lançamento e baixar/cancelar empréstimo'],
+  ['cobrancas','Cobranças','Gerar, baixar e excluir cobranças de uniforme não devolvido']];
+const PERM_PADRAO = ['funcionarios','catalogo','estrutura','fornecedores'];
+const minhasPerms = ()=> S.acessos.find(a=>a.id===S.unidade?.id)?.permissoes || [];
+const pode = k => ehGestor() || (S.papel==='OPERADOR' && minhasPerms().includes(k));
+function exigePode(k){ if(!pode(k)){ toast('Você não tem essa função liberada nesta unidade. Fale com o gestor.','err'); return false; } return true; }
 function exigeGestor(){ if(!ehGestor()){ toast('Ação restrita ao gestor desta unidade.','err'); return false; } return true; }
 
 /* --- 4. ACESSO ------------------------------------------------------ */
@@ -679,6 +705,7 @@ const ROTAS = [
   {id:'pendencias',   t:'Não devolvidos',ic:'!', f:()=>viewPendencias()},
   {g:'Cadastros'},
   {id:'cadastros',    t:'Itens e grades',ic:'⚙', f:()=>viewCadastros()},
+  {id:'permissoes',   t:'Logins e permissões', ic:'', soGestor:true, f:()=>viewPermissoes()},
   {id:'config',       t:'Configurações', ic:'☰', f:()=>viewConfig()}
 ];
 function pintarUnidade(){
@@ -711,10 +738,11 @@ async function trocarUnidade(id){
   toast('Agora operando em '+nova.nome+'.','ok');
 }
 
-const ICONES_NAV = {"painel": '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>', "estoque": '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>', "movimentacoes": '<path d="M7 7h13l-4-4M17 17H4l4 4"/>', "emprestimos": '<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>', "lavanderia": '<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="4.5"/><path d="M8 6.5h.01M11 6.5h2"/>', "inventario": '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="m9 13 2 2 4-4"/>', "funcionarios": '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/>', "dotacao": '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>', "pendencias": '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/>', "cadastros": '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/>', "config": '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 14H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 3V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 10h.1a2 2 0 1 1 0 4H21z"/>'};
+const ICONES_NAV = {"painel": '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>', "estoque": '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>', "movimentacoes": '<path d="M7 7h13l-4-4M17 17H4l4 4"/>', "emprestimos": '<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>', "lavanderia": '<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="4.5"/><path d="M8 6.5h.01M11 6.5h2"/>', "inventario": '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="m9 13 2 2 4-4"/>', "funcionarios": '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/>', "dotacao": '<path d="M8 3 3 6l2 5 3-1v11h8V10l3 1 2-5-5-3a4 4 0 0 1-8 0z"/>', "pendencias": '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17.5v.5"/>', "cadastros": '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/>', "permissoes": '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.3"/>', "config": '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 14H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 3V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 10h.1a2 2 0 1 1 0 4H21z"/>'};
 function montarNav(){
   $('#nav').innerHTML = ROTAS.map(r=>{
     if(r.g) return `<div class="nav-lbl">${r.g}</div>`;
+    if(r.soGestor && !ehGestor()) return '';
     const badge = r.id==='estoque' && S.alertas ? `<span class="badge">${S.alertas}</span>`
                : r.id==='emprestimos' && S.atrasados ? `<span class="badge">${S.atrasados}</span>`
                : r.id==='lavanderia' && S.aguardando ? `<span class="badge">${S.aguardando}</span>`
@@ -752,11 +780,11 @@ async function iniciarSessao(){
 
   // Unidades a que este login tem acesso
   const { data: ac, error: e2 } = await S.sb.from('almox_acessos')
-    .select('unidade_id, papel, ativo, almox_unidades(id, codigo, nome, ativo)')
+    .select('unidade_id, papel, ativo, permissoes, almox_unidades(id, codigo, nome, ativo)')
     .eq('usuario_id', user.id).eq('ativo', true);
   if(e2) return telaLogin('Erro ao ler seus acessos: '+e2.message);
   S.acessos = (ac||[]).filter(a=>a.almox_unidades?.ativo)
-    .map(a=>({id:a.unidade_id, papel:a.papel, ...a.almox_unidades}))
+    .map(a=>({id:a.unidade_id, papel:a.papel, permissoes:a.permissoes||[], ...a.almox_unidades}))
     .sort((x,y)=>x.codigo.localeCompare(y.codigo));
 
   if(!S.acessos.length){
@@ -1149,7 +1177,7 @@ async function idFornecedor(nome){
   if(!nome) return null;
   const achado = S.fornecedores.find(f=>f.nome.toLowerCase() === nome.toLowerCase());
   if(achado) return achado.id;
-  if(!ehGestor()){ toast('Fornecedor novo só pode ser criado pelo gestor. Lançamento seguirá sem fornecedor.','err'); return null; }
+  if(!pode('fornecedores')){ toast('Fornecedor novo só pode ser criado pelo gestor. Lançamento seguirá sem fornecedor.','err'); return null; }
   const { data, error } = await S.sb.from('almox_fornecedores').insert({nome, unidade_id:S.unidade.id}).select().single();
   if(error){ erro(error); return null; }
   S.fornecedores.push(data);
@@ -1353,7 +1381,7 @@ function formDevolucao(varId=null){
 }
 
 function formDescarte(varId=null){
-  if(!ehGestor()) return toast('Descarte é restrito ao gestor.','err');
+  if(!pode('correcoes')) return toast('Descarte é restrito ao gestor.','err');
   modal({titulo:'Baixa por descarte ou perda', wide:true, corpo:`
     <label class="field"><span>Motivo <em>*</em></span><select class="inp" id="fJust">
       <option>Peça danificada / imprópria para uso</option>
@@ -1383,7 +1411,7 @@ function formDescarte(varId=null){
 }
 
 function formAjuste(){
-  if(!ehGestor()) return toast('Ajuste é restrito ao gestor.','err');
+  if(!pode('correcoes')) return toast('Ajuste é restrito ao gestor.','err');
   modal({titulo:'Ajuste manual de saldo', wide:true, corpo:`
     <p class="small muted" style="margin-top:0">Todo ajuste fica registrado com autor e justificativa.
     Para conferência completa prefira o módulo Inventário.</p>
@@ -1422,7 +1450,7 @@ async function viewMovimentacoes(){
     <button class="btn" onclick="formDevolucao()">Devolução</button>
     <button class="btn pri" onclick="formSaidaFuncionario()">Entrega</button>
     <button class="btn" onclick="formEmprestimo()">Empréstimo</button>
-    ${ehGestor()?`<button class="btn" onclick="formAjuste()">Ajuste</button>
+    ${pode('correcoes')?`<button class="btn" onclick="formAjuste()">Ajuste</button>
       <button class="btn dan" onclick="formDescarte()">Descarte</button>`:''}` : '';
 
   $('#view').innerHTML = `
@@ -1494,7 +1522,7 @@ async function carregarMovs(){
         <td style="text-align:right;white-space:nowrap">
           ${(m.documento||'').startsWith('ENT-')
             ? `<button class="btn sm" onclick="termoEntrega('${esc(m.documento)}')">Termo</button>`:''}
-          ${(ehGestor() && !m.cancelada && !m.emprestimo_id)
+          ${(pode('correcoes') && !m.cancelada && !m.emprestimo_id)
             ? `<button class="btn sm dan" onclick="cancelarMov(${m.id})">Cancelar</button>`:''}</td>
       </tr>`).join('')}</tbody></table></div>`;
 }
@@ -1593,14 +1621,14 @@ async function abrirEmprestimo(id){
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn" onclick="reciboEmprestimo(${id})">Imprimir recibo</button>
       ${aberto && podeOperar()?`<button class="btn pri" onclick="formDevolverEmprestimo(${id})">Registrar devolução</button>`:''}
-      ${aberto && ehGestor()?`<button class="btn dan" onclick="formBaixarEmprestimo(${id})">Dar baixa</button>`:''}
-      ${emp.status!=='CANCELADO' && ehGestor()?`<button class="btn dan" onclick="formCancelarEmprestimo(${id})">Cancelar empréstimo</button>`:''}
+      ${aberto && pode('correcoes')?`<button class="btn dan" onclick="formBaixarEmprestimo(${id})">Dar baixa</button>`:''}
+      ${emp.status!=='CANCELADO' && pode('correcoes')?`<button class="btn dan" onclick="formCancelarEmprestimo(${id})">Cancelar empréstimo</button>`:''}
       ${!emp.recibo_assinado && podeOperar()?`<button class="btn" onclick="marcarAssinado(${id})">Marcar como assinado</button>`:''}
     </div>`});
 }
 
 function formCancelarEmprestimo(id){
-  if(!exigeGestor()) return;
+  if(!exigePode('correcoes')) return;
   modal({titulo:'Cancelar empréstimo', corpo:`
     <p style="margin-top:0">Use quando o empréstimo foi <b>lançado por engano</b>. Todos os lançamentos dele
     são estornados, as peças voltam ao estoque disponível e nada vai para a lavanderia nem gera cobrança.</p>
@@ -2314,7 +2342,7 @@ async function viewFuncionarios(){
          ['INATIVOS','Desligados'],['TODOS','Todos']]
         .map(([k,t])=>`<option value="${k}" ${filtroVinculo===k?'selected':''}>${t}</option>`).join('')}
     </select>
-    ${ehGestor()?`<button class="btn pri" onclick="formFuncionario()">Novo funcionário</button>`:''}`;
+    ${pode('funcionarios')?`<button class="btn pri" onclick="formFuncionario()">Novo funcionário</button>`:''}`;
   $('#view').innerHTML = `<div class="card"><div id="funcLista"></div></div>`;
   await listarFuncionarios();
 }
@@ -2354,7 +2382,7 @@ async function listarFuncionarios(){
             d<0?`venceu há ${-d} dia(s)` : d===0?'vence hoje' : `faltam ${d} dia(s)`}</div>`; })()}</td>
       <td class="num" style="font-weight:600">${porFunc[f.id]||0}</td>
       <td style="text-align:right;white-space:nowrap">
-        ${ehGestor()?`<button class="btn sm" onclick="event.stopPropagation();formFuncionario(${f.id})">Editar</button>`:''}
+        ${pode('funcionarios')?`<button class="btn sm" onclick="event.stopPropagation();formFuncionario(${f.id})">Editar</button>`:''}
         <button class="btn sm">Ficha</button></td></tr>`).join('')}
     </tbody></table></div>` : '<div class="empty"><b>Nenhum funcionário</b>Cadastre a equipe para começar a registrar entregas.</div>';
 }
@@ -2373,9 +2401,9 @@ async function fichaFuncionario(id){
     <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
       ${podeOperar()?`<button class="btn sm pri" onclick="formSaidaFuncionario(null,${id})">Entregar peça</button>
       <button class="btn sm" onclick="formEmprestimo(null,${id})">Emprestar</button>`:''}
-      ${ehGestor()?`<button class="btn sm" onclick="formFuncionario(${id})">Editar cadastro</button>`:''}
-      ${ehGestor() && f.ativo?`<button class="btn sm dan" onclick="formDesligar(${id})">Registrar desligamento</button>`:''}
-      ${ehGestor() && !f.ativo?`<button class="btn sm" onclick="reativarFuncionario(${id})">Reativar</button>`:''}
+      ${pode('funcionarios')?`<button class="btn sm" onclick="formFuncionario(${id})">Editar cadastro</button>`:''}
+      ${pode('funcionarios') && f.ativo?`<button class="btn sm dan" onclick="formDesligar(${id})">Registrar desligamento</button>`:''}
+      ${pode('funcionarios') && !f.ativo?`<button class="btn sm" onclick="reativarFuncionario(${id})">Reativar</button>`:''}
     </div>
     <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;align-items:center">
       <button class="btn sm" onclick="formTermoUniforme(${id})">Termo de compromisso</button>
@@ -2386,9 +2414,9 @@ async function fichaFuncionario(id){
         : '<span class="tag zero">sem treinamento de EPI</span>'}
       ${f.termo_assinado_em
         ? `<span class="tag ok">termo assinado em ${dt(f.termo_assinado_em)}</span>
-           ${ehGestor()?`<button class="btn sm" onclick="formTermoAssinado(${id})">Alterar data</button>`:''}`
+           ${pode('funcionarios')?`<button class="btn sm" onclick="formTermoAssinado(${id})">Alterar data</button>`:''}`
         : `<span class="tag zero">sem termo assinado</span>
-           ${ehGestor()?`<button class="btn sm pri" onclick="formTermoAssinado(${id})">Registrar assinatura</button>`:''}`}
+           ${pode('funcionarios')?`<button class="btn sm pri" onclick="formTermoAssinado(${id})">Registrar assinatura</button>`:''}`}
     </div>
     ${(f.observacoes||'').includes('SETOR A CONFIRMAR')?`<div class="card" style="border-color:#E8D28C;background:var(--amber-l);margin-bottom:18px">
       <div class="card-b" style="padding:10px 12px"><b style="color:var(--amber)">Setor a confirmar</b>
@@ -2447,7 +2475,7 @@ async function fichaFuncionario(id){
       </tbody></table></div>`:'<p class="small muted">Sem movimentações.</p>'}`});
 }
 function formFuncionario(id=null){
-  if(!exigeGestor()) return;
+  if(!exigePode('funcionarios')) return;
   const f = id? S.funcionarios.find(x=>x.id===id) : {};
   modal({titulo: id?'Editar funcionário':'Novo funcionário em '+S.unidade.nome, corpo:`
     <label class="field"><span>Nome completo <em>*</em></span><input class="inp" id="nNome" value="${esc(f.nome||'')}"></label>
@@ -2538,7 +2566,7 @@ let abaCad = 'itens';
 async function viewCadastros(){
   const abas = [['itens','Itens'],['grades','Grades e tamanhos'],['categorias','Categorias'],
                 ['regras','Regras de dotação'],['fornecedores','Fornecedores'],
-                ['funcoes','Setores e funções'],['unidades','Minha unidade'],['usuarios','Logins e acessos']];
+                ['funcoes','Setores e funções'],['unidades','Minha unidade']];
   $('#view').innerHTML = `<div class="tabs">${abas.map(([k,t])=>
       `<button data-a="${k}" class="${abaCad===k?'on':''}">${t}</button>`).join('')}</div>
     <div id="cadArea"></div>`;
@@ -2569,7 +2597,7 @@ function mostrarErroAba(e){
 
 /* --- itens ---------------------------------------------------------- */
 function cadItens(){
-  $('#topAcoes').innerHTML = ehGestor()? `<button class="btn pri" onclick="formItem()">Novo item</button>`:'';
+  $('#topAcoes').innerHTML = pode('catalogo')? `<button class="btn pri" onclick="formItem()">Novo item</button>`:'';
   const saldos = {}; S.estoque.forEach(e=> saldos[e.item_id]=(saldos[e.item_id]||0)+e.saldo);
   $('#cadArea').innerHTML = `<div class="card"><div class="tbl-wrap"><table>
     <thead><tr><th>Item</th><th>Setores que usam</th><th>Grade</th><th>Dotação</th><th class="num">Mínimo</th>
@@ -2597,11 +2625,11 @@ function cadItens(){
           return `<span class="tag ok">CA ${esc(i.ca_epi)}</span>`;
         })():''}
         ${i.exige_devolucao?'<span class="tag brand">devolução</span>':''}${i.ativo?'':'<span class="tag">inativo</span>'}</td>
-      <td style="text-align:right">${ehGestor()?`<button class="btn sm" onclick="formItem(${i.id})">Editar</button>`:''}</td>
+      <td style="text-align:right">${pode('catalogo')?`<button class="btn sm" onclick="formItem(${i.id})">Editar</button>`:''}</td>
     </tr>`).join('')}</tbody></table></div></div>`;
 }
 function formItem(id=null){
-  if(!exigeGestor()) return;
+  if(!exigePode('catalogo')) return;
   const i = id? S.itens.find(x=>x.id===id) : {};
   modal({titulo: id?'Editar item':'Novo item de uniforme', wide:true, corpo:`
     <div class="row">
@@ -2733,26 +2761,26 @@ async function sincronizarVariacoes(itemId){
 
 /* --- grades e tamanhos ---------------------------------------------- */
 function cadGrades(){
-  $('#topAcoes').innerHTML = ehGestor()? `<button class="btn pri" onclick="formGrade()">Nova grade</button>`:'';
+  $('#topAcoes').innerHTML = pode('catalogo')? `<button class="btn pri" onclick="formGrade()">Nova grade</button>`:'';
   $('#cadArea').innerHTML = `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(330px,1fr))">
     ${S.grades.map(g=>{
       const tams = S.tamanhos.filter(t=>t.grade_id===g.id).sort((a,b)=>a.ordem-b.ordem);
       const usos = S.itens.filter(i=>i.grade_id===g.id).length;
       return `<div class="card"><div class="card-h"><h3>${esc(g.nome)}</h3><div class="sp"></div>
         <span class="small muted">${usos} itens</span>
-        ${ehGestor()?`<button class="btn sm" onclick="formGrade(${g.id})">Editar</button>`:''}</div>
+        ${pode('catalogo')?`<button class="btn sm" onclick="formGrade(${g.id})">Editar</button>`:''}</div>
         <div class="card-b">
           <p class="small muted" style="margin:0 0 10px">${esc(g.descricao||'')}</p>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             ${tams.map(t=>`<span class="tag ${t.ativo?'brand':''}" style="font-family:var(--mono)">${esc(t.rotulo)}
-              ${ehGestor()?`<button title="Remover tamanho" style="background:none;border:0;cursor:pointer;color:inherit;padding:0 0 0 3px"
+              ${pode('catalogo')?`<button title="Remover tamanho" style="background:none;border:0;cursor:pointer;color:inherit;padding:0 0 0 3px"
                 onclick="removerTamanho(${t.id})">×</button>`:''}</span>`).join('') || '<span class="small muted">Sem tamanhos.</span>'}
-            ${ehGestor()?`<button class="btn sm" onclick="formTamanho(${g.id})">+ tamanho</button>`:''}
+            ${pode('catalogo')?`<button class="btn sm" onclick="formTamanho(${g.id})">+ tamanho</button>`:''}
           </div></div></div>`;
     }).join('')}</div>`;
 }
 function formGrade(id=null){
-  if(!exigeGestor()) return;
+  if(!exigePode('catalogo')) return;
   const g = id? S.grades.find(x=>x.id===id):{};
   modal({titulo:id?'Editar grade':'Nova grade de tamanhos', corpo:`
     <label class="field"><span>Nome <em>*</em></span><input class="inp" id="gNome" value="${esc(g.nome||'')}"
@@ -2777,7 +2805,7 @@ function formGrade(id=null){
     }}]});
 }
 function formTamanho(gradeId){
-  if(!exigeGestor()) return;
+  if(!exigePode('catalogo')) return;
   const ord = Math.max(0,...S.tamanhos.filter(t=>t.grade_id===gradeId).map(t=>t.ordem))+1;
   modal({titulo:'Novo tamanho', corpo:`
     <div class="row">
@@ -2799,7 +2827,7 @@ function formTamanho(gradeId){
     }}]});
 }
 function removerTamanho(id){
-  if(!exigeGestor()) return;
+  if(!exigePode('catalogo')) return;
   const t = S.tamanhos.find(x=>x.id===id);
   const comSaldo = S.estoque.filter(e=>e.tamanho_id===id && e.saldo>0);
   confirmar('Remover tamanho',
@@ -2815,7 +2843,7 @@ function removerTamanho(id){
 
 /* --- categorias e fornecedores -------------------------------------- */
 function cadCategorias(){
-  $('#topAcoes').innerHTML = ehGestor()? `<button class="btn pri" onclick="formCategoria()">Nova categoria</button>`:'';
+  $('#topAcoes').innerHTML = pode('catalogo')? `<button class="btn pri" onclick="formCategoria()">Nova categoria</button>`:'';
   $('#cadArea').innerHTML = `<div class="card"><div class="tbl-wrap"><table>
     <thead><tr><th>Categoria</th><th class="num">Itens</th><th class="num">Peças</th><th></th></tr></thead>
     <tbody>${S.categorias.map(c=>{
@@ -2823,11 +2851,11 @@ function cadCategorias(){
       const pecas = S.estoque.filter(e=>e.categoria_id===c.id).reduce((s,e)=>s+e.saldo,0);
       return `<tr><td><span class="tag" style="border-left:3px solid ${esc(c.cor||'#0B4F53')}">${esc(c.nome)}</span></td>
         <td class="num">${itens}</td><td class="num">${num(pecas)}</td>
-        <td style="text-align:right">${ehGestor()?`<button class="btn sm" onclick="formCategoria(${c.id})">Editar</button>`:''}</td></tr>`;
+        <td style="text-align:right">${pode('catalogo')?`<button class="btn sm" onclick="formCategoria(${c.id})">Editar</button>`:''}</td></tr>`;
     }).join('')}</tbody></table></div></div>`;
 }
 function formCategoria(id=null){
-  if(!exigeGestor()) return;
+  if(!exigePode('catalogo')) return;
   const c = id? S.categorias.find(x=>x.id===id):{};
   modal({titulo:id?'Editar categoria':'Nova categoria', corpo:`
     <label class="field"><span>Nome <em>*</em></span><input class="inp" id="cNome" value="${esc(c.nome||'')}"></label>
@@ -2846,18 +2874,18 @@ function formCategoria(id=null){
     }}]});
 }
 function cadFornecedores(){
-  $('#topAcoes').innerHTML = ehGestor()? `<button class="btn pri" onclick="formFornecedor()">Novo fornecedor</button>`:'';
+  $('#topAcoes').innerHTML = pode('fornecedores')? `<button class="btn pri" onclick="formFornecedor()">Novo fornecedor</button>`:'';
   $('#cadArea').innerHTML = `<div class="card"><div class="tbl-wrap"><table>
     <thead><tr><th>Fornecedor</th><th>CNPJ</th><th>Contato</th><th>Telefone</th><th></th></tr></thead>
     <tbody>${S.fornecedores.length? S.fornecedores.map(f=>`<tr${f.ativo?'':' style="opacity:.5"'}>
       <td class="it-nome">${esc(f.nome)}</td><td class="mono small">${esc(f.cnpj||'—')}</td>
       <td class="small">${esc(f.contato||'—')}</td><td class="small">${esc(f.telefone||'—')}</td>
-      <td style="text-align:right">${ehGestor()?`<button class="btn sm" onclick="formFornecedor(${f.id})">Editar</button>`:''}</td>
+      <td style="text-align:right">${pode('fornecedores')?`<button class="btn sm" onclick="formFornecedor(${f.id})">Editar</button>`:''}</td>
     </tr>`).join('') : '<tr><td colspan="5"><div class="empty">Nenhum fornecedor cadastrado.</div></td></tr>'}
     </tbody></table></div></div>`;
 }
 function formFornecedor(id=null){
-  if(!exigeGestor()) return;
+  if(!exigePode('fornecedores')) return;
   const f = id? S.fornecedores.find(x=>x.id===id):{};
   modal({titulo:id?'Editar fornecedor':'Novo fornecedor', corpo:`
     <label class="field"><span>Nome <em>*</em></span><input class="inp" id="foNome" value="${esc(f.nome||'')}"></label>
@@ -3073,7 +3101,7 @@ async function viewDotacao(){
     <input class="inp" style="width:200px" placeholder="Buscar funcionário…" value="${esc(buscaDot)}"
       oninput="buscaDot=this.value;pintarDotacao()">
     <button class="btn" onclick="exportarDotacaoCSV()">Exportar CSV</button>
-    ${ehGestor()?`<button class="btn" onclick="abaCad='regras';irPara('cadastros')">Editar regras</button>`:''}`;
+    ${pode('estrutura')?`<button class="btn" onclick="abaCad='regras';irPara('cadastros')">Editar regras</button>`:''}`;
 
   window._dot = dados;
   const porFunc = {};
@@ -3138,7 +3166,7 @@ function exportarDotacaoCSV(){
 
 /* --- cadastro das regras de dotação --------------------------------- */
 function cadRegras(){
-  $('#topAcoes').innerHTML = ehGestor()? `<button class="btn pri" onclick="formRegra()">Nova regra</button>`:'';
+  $('#topAcoes').innerHTML = pode('estrutura')? `<button class="btn pri" onclick="formRegra()">Nova regra</button>`:'';
   const itensSemGrupo = S.itens.filter(i=>i.ativo && !i.grupo_dotacao).length;
   $('#cadArea').innerHTML = `
     <div class="card" style="margin-bottom:14px"><div class="card-b">
@@ -3156,12 +3184,12 @@ function cadRegras(){
           : '<span class="muted">todos os funcionários</span>'}</td>
         <td class="num" style="font-weight:600">${d.quantidade_minima}</td>
         <td class="small muted">${esc(d.observacoes||'—')}</td>
-        <td style="text-align:right">${ehGestor()?`<button class="btn sm" onclick="formRegra(${d.id})">Editar</button>`:''}</td>
+        <td style="text-align:right">${pode('estrutura')?`<button class="btn sm" onclick="formRegra(${d.id})">Editar</button>`:''}</td>
       </tr>`).join('') : '<tr><td colspan="5"><div class="empty">Nenhuma regra cadastrada.</div></td></tr>'}
     </tbody></table></div></div>`;
 }
 function formRegra(id=null){
-  if(!exigeGestor()) return;
+  if(!exigePode('estrutura')) return;
   const d = id? S.dotacoes.find(x=>x.id===id):{};
   const grupos = [...new Set([...S.itens.map(i=>i.grupo_dotacao), ...S.dotacoes.map(x=>x.grupo)])].filter(Boolean);
   modal({titulo:id?'Editar regra de dotação':'Nova regra de dotação', corpo:`
@@ -3234,13 +3262,13 @@ async function listarCobrancas(){
           ${x.observacoes?`<div class="it-meta">${esc(x.observacoes.slice(0,40))}</div>`:''}</td>
         <td style="text-align:right;white-space:nowrap">
           <button class="btn sm" onclick='termoCobranca(${JSON.stringify(x).replace(/'/g,"&#39;")})'>Comunicado</button>
-          ${ehGestor() && x.status==='PENDENTE'?`<button class="btn sm pri" onclick="formBaixarCobranca(${x.id})">Baixar</button>`:''}
+          ${pode('cobrancas') && x.status==='PENDENTE'?`<button class="btn sm pri" onclick="formBaixarCobranca(${x.id})">Baixar</button>`:''}
         </td></tr>`).join('')}</tbody></table></div>`
     : `<div class="empty"><b>Nenhuma cobrança</b>Cobranças nascem quando um empréstimo é baixado sem a peça voltar.</div>`;
 }
 
 function formBaixarCobranca(id){
-  if(!exigeGestor()) return;
+  if(!exigePode('cobrancas')) return;
   modal({titulo:'Baixar cobrança', corpo:`
     <label class="field"><span>Situação <em>*</em></span><select class="inp" id="cbSt">
       <option value="DESCONTADA">Descontada em folha (com anuência do funcionário)</option>
@@ -3453,7 +3481,7 @@ async function viewPendencias(){
         <td class="num">${brl(f.valor)}</td>
         <td style="text-align:right;white-space:nowrap">
           <button class="btn sm" onclick="fichaFuncionario(${f.funcionario_id})">Ficha</button>
-          ${ehGestor()?`<button class="btn sm pri" onclick="formCobrarPendencia(${f.funcionario_id})">Cobrar</button>`:''}
+          ${pode('cobrancas')?`<button class="btn sm pri" onclick="formCobrarPendencia(${f.funcionario_id})">Cobrar</button>`:''}
         </td></tr>`).join('')}</tbody></table></div>`
     : `<div class="empty"><b>Nenhuma pendência</b>Todo mundo que saiu devolveu o uniforme.</div>`;
 
@@ -3472,7 +3500,7 @@ function exportarPendenciasCSV(){
 }
 
 async function formCobrarPendencia(funcId){
-  if(!exigeGestor()) return;
+  if(!exigePode('cobrancas')) return;
   const itens = (window._pend||[]).filter(x=>x.funcionario_id===funcId && !x.tem_cobranca);
   if(!itens.length) return toast('Todas as peças deste ex-funcionário já têm cobrança.','err');
   const padrao = param('custo_extravio_uniforme', 50);
@@ -3563,7 +3591,7 @@ function formTreinamento(funcId){
 }
 
 function formTermoAssinado(id){
-  if(!exigeGestor()) return;
+  if(!exigePode('funcionarios')) return;
   const f = S.funcionarios.find(x=>x.id===id);
   modal({titulo:'Registrar assinatura do termo', corpo:`
     <p class="small muted" style="margin-top:0">Anote a data em que ${esc(f.nome.split(' ')[0])} assinou o termo
@@ -3590,7 +3618,7 @@ function formTermoAssinado(id){
 }
 
 function formDesligar(id){
-  if(!exigeGestor()) return;
+  if(!exigePode('funcionarios')) return;
   const f = S.funcionarios.find(x=>x.id===id);
   modal({titulo:'Registrar desligamento', corpo:`
     <p style="margin-top:0">${esc(f.nome)} passa a inativo. Se ficou com uniforme, a peça vira pendência de
@@ -3611,7 +3639,7 @@ function formDesligar(id){
     }}]});
 }
 function reativarFuncionario(id){
-  if(!exigeGestor()) return;
+  if(!exigePode('funcionarios')) return;
   confirmar('Reativar funcionário','O cadastro volta a aparecer nas listas e a contar para a dotação.',
     async()=>{ const {error} = await S.sb.rpc('almox_reativar_funcionario',{p_funcionario_id:id});
       if(error) throw error; $('#drawer').innerHTML=''; await carregarBase();
@@ -3626,7 +3654,7 @@ function reativarFuncionario(id){
    SETORES E FUNÇÕES
    ===================================================================== */
 function cadFuncoes(){
-  $('#topAcoes').innerHTML = ehGestor()
+  $('#topAcoes').innerHTML = pode('estrutura')
     ? `<button class="btn" onclick="formSetor()">Novo setor</button>
        <button class="btn pri" onclick="formFuncao()">Nova função</button>` : '';
   const quantos = fid => S.funcionarios.filter(f=>f.ativo && f.funcao_id===fid).length;
@@ -3646,7 +3674,7 @@ function cadFuncoes(){
         return `<div class="card">
           <div class="card-h"><h3>${esc(setor)}</h3><div class="sp"></div>
             <span class="small muted">${pessoas} pessoa(s)</span>
-            ${ehGestor()?`<button class="btn sm" onclick="formSetor(${reg.id||'null'})">Editar</button>`:''}</div>
+            ${pode('estrutura')?`<button class="btn sm" onclick="formSetor(${reg.id||'null'})">Editar</button>`:''}</div>
           ${fs.length ? `<div class="tbl-wrap"><table><tbody>
             ${fs.map(f=>`<tr${f.ativo?'':' style="opacity:.5"'}>
               <td><div class="it-nome">${esc(f.nome)}</div>
@@ -3654,10 +3682,10 @@ function cadFuncoes(){
                 ${f.ativo?'':'<span class="tag">inativa</span>'}</td>
               <td class="num small muted" style="width:84px">${quantos(f.id)} pessoa(s)</td>
               <td style="text-align:right;width:78px">
-                ${ehGestor()?`<button class="btn sm" onclick="formFuncao(${f.id})">Editar</button>`:''}</td>
+                ${pode('estrutura')?`<button class="btn sm" onclick="formFuncao(${f.id})">Editar</button>`:''}</td>
             </tr>`).join('')}</tbody></table></div>`
             : '<div class="empty" style="padding:22px">Nenhuma função neste setor.</div>'}
-          ${ehGestor()?`<div class="card-b" style="border-top:1px solid var(--line);padding:10px 14px">
+          ${pode('estrutura')?`<div class="card-b" style="border-top:1px solid var(--line);padding:10px 14px">
             <button class="btn sm" onclick="formFuncao(null,'${esc(setor)}')">+ função em ${esc(setor)}</button>
           </div>`:''}
         </div>`;
@@ -3666,7 +3694,7 @@ function cadFuncoes(){
 }
 
 function formSetor(id=null){
-  if(!exigeGestor()) return;
+  if(!exigePode('estrutura')) return;
   const st = id ? S.setores.find(x=>x.id===id) : {};
   const pessoas = id ? S.funcionarios.filter(f=>f.ativo && f.setor===st.nome).length : 0;
   const funcoes = id ? S.funcoes.filter(f=>f.setor===st.nome).length : 0;
@@ -3711,7 +3739,7 @@ function formSetor(id=null){
 }
 
 function formFuncao(id=null, setorPadrao=''){
-  if(!exigeGestor()) return;
+  if(!exigePode('estrutura')) return;
   const f = id ? S.funcoes.find(x=>x.id===id) : {};
   const usando = id ? S.funcionarios.filter(x=>x.ativo && x.funcao_id===id) : [];
   modal({titulo: id?'Editar função':'Nova função', corpo:`
@@ -3822,40 +3850,62 @@ function formNovaUnidade(){
 /* =====================================================================
    LOGINS DA UNIDADE — cada gestor cuida dos seus
    ===================================================================== */
+function viewPermissoes(){
+  $('#view').innerHTML = '<div id="cadArea"></div>';
+  return cadUsuarios();
+}
+const recarregarAcessos = ()=> S.rota==='permissoes' ? cadUsuarios() : pintarCadastro();
 async function cadUsuarios(){
   $('#topAcoes').innerHTML = ehGestor()
     ? `<button class="btn pri" onclick="formNovoLogin()">Dar acesso</button>` : '';
   if(!ehGestor()) return $('#cadArea').innerHTML =
     '<div class="card"><div class="empty">Somente o gestor desta unidade administra os acessos.</div></div>';
 
-  const ac = await q('almox_acessos','id, papel, ativo, usuario_id, almox_usuarios(nome, email, ativo)',
+  const ac = await q('almox_acessos','id, papel, ativo, permissoes, usuario_id, almox_usuarios(nome, email, ativo)',
     b=>b.eq('unidade_id', S.unidade.id));
+  ac.sort((x,y)=>(y.ativo-x.ativo) || String(x.almox_usuarios?.nome||'').localeCompare(String(y.almox_usuarios?.nome||'')));
+  const PAP = {GESTOR:'Gestor',OPERADOR:'Operador',LEITURA:'Consulta'};
 
-  $('#cadArea').innerHTML = `<div class="card">
-    <div class="card-h"><h3>${ac.length} logins em ${esc(S.unidade.codigo)}</h3><div class="sp"></div>
-      <span class="small muted">acessos desta unidade apenas</span></div>
-    ${ac.length?`<div class="tbl-wrap"><table>
-      <thead><tr><th>Nome</th><th>E-mail</th><th>Papel nesta unidade</th><th>Ativo</th><th></th></tr></thead>
-      <tbody>${ac.map(a=>`<tr${a.ativo?'':' style="opacity:.55"'}>
-        <td class="it-nome">${esc(a.almox_usuarios?.nome||'—')}${a.usuario_id===S.user.id?' <span class="tag">você</span>':''}</td>
-        <td class="small mono">${esc(a.almox_usuarios?.email||'—')}</td>
-        <td><select class="inp" style="width:140px" ${a.usuario_id===S.user.id?'disabled':''}
+  const funcoes = a => a.papel==='GESTOR'
+      ? `<div class="perm-nota">Gestor tem todas as funções nesta unidade, inclusive liberar acessos.</div>`
+    : a.papel==='LEITURA'
+      ? `<div class="perm-nota">Consulta só enxerga. Mude para Operador para liberar funções.</div>`
+    : `<div class="perm-grid">${PERMISSOES.map(([k,t,d])=>`
+        <label class="perm${(a.permissoes||[]).includes(k)?' on':''}">
+          <input type="checkbox" ${(a.permissoes||[]).includes(k)?'checked':''} ${a.ativo?'':'disabled'}
+            onchange="mudarPermissao(${a.id},'${k}',this.checked,this)">
+          <span class="sw"></span><span><b>${t}</b><small>${d}</small></span></label>`).join('')}</div>`;
+
+  $('#cadArea').innerHTML = `
+    <div class="card" style="margin-bottom:14px"><div class="card-b small muted">
+      Logins com acesso a <b>${esc(S.unidade.nome)}</b>. O <b>Operador</b> sempre lança entrada, entrega,
+      empréstimo, devolução, lavanderia e contagem; as funções abaixo você liga e desliga para cada pessoa.
+      Vale só para esta unidade. Logins novos são criados no portal NEXUS (Acessos).
+    </div></div>
+    ${ac.length ? ac.map(a=>`<div class="card perm-card"${a.ativo?'':' style="opacity:.6"'}>
+      <div class="perm-h">
+        <div class="avatar">${esc(String(a.almox_usuarios?.nome||'?').trim().split(/\s+/).slice(0,2).map(p=>p[0]||'').join('').toUpperCase())}</div>
+        <div class="perm-quem"><b>${esc(a.almox_usuarios?.nome||'—')}${a.usuario_id===S.user.id?' <span class="tag">você</span>':''}</b>
+          <span>${esc(a.almox_usuarios?.email||'—')}</span></div>
+        <select class="inp" style="width:150px" ${a.usuario_id===S.user.id?'disabled':''}
               onchange="mudarPapelAcesso(${a.id}, this.value)">
-          ${['GESTOR','OPERADOR','LEITURA'].map(p=>`<option value="${p}" ${a.papel===p?'selected':''}>
-            ${{GESTOR:'Gestor',OPERADOR:'Operador',LEITURA:'Consulta'}[p]}</option>`).join('')}
-        </select></td>
-        <td><label class="check" style="margin:0"><input type="checkbox" ${a.ativo?'checked':''}
-          ${a.usuario_id===S.user.id?'disabled':''} onchange="mudarAtivoAcesso(${a.id}, this.checked)"></label></td>
-        <td style="text-align:right">${a.usuario_id===S.user.id?'':
-          `<button class="btn sm dan" onclick="removerAcesso(${a.id},'${esc(a.almox_usuarios?.nome||'')}')">Remover</button>`}</td>
-      </tr>`).join('')}</tbody></table></div>`
-      : '<div class="empty">Nenhum login vinculado ainda.</div>'}
-    <div class="card-b small muted" style="border-top:1px solid var(--line)">
-      <b>Gestor</b> faz tudo na unidade, inclusive administrar estes logins.
-      <b>Operador</b> lança entrada, entrega, empréstimo, devolução e contagem, mas não mexe em cadastro
-      nem cancela lançamento. <b>Consulta</b> só lê.
-      Remover o acesso não apaga o login da pessoa — ela apenas deixa de enxergar esta unidade.
-    </div></div>`;
+          ${['GESTOR','OPERADOR','LEITURA'].map(p=>`<option value="${p}" ${a.papel===p?'selected':''}>${PAP[p]}</option>`).join('')}
+        </select>
+        <label class="check" style="margin:0" title="Acesso ativo"><input type="checkbox" ${a.ativo?'checked':''}
+          ${a.usuario_id===S.user.id?'disabled':''} onchange="mudarAtivoAcesso(${a.id}, this.checked)"> Ativo</label>
+        ${a.usuario_id===S.user.id?'':
+          `<button class="btn sm dan" onclick="removerAcesso(${a.id},'${esc(a.almox_usuarios?.nome||'')}')">Remover</button>`}
+      </div>
+      ${funcoes(a)}
+    </div>`).join('') : '<div class="card"><div class="empty">Nenhum login vinculado ainda.</div></div>'}`;
+}
+async function mudarPermissao(id, k, ligado, el){
+  const card = el.closest('.perm-grid');
+  const marcadas = [...card.querySelectorAll('input')].map((i,n)=>i.checked?PERMISSOES[n][0]:null).filter(Boolean);
+  el.closest('.perm').classList.toggle('on', ligado);
+  const {error} = await S.sb.from('almox_acessos').update({permissoes:marcadas}).eq('id',id);
+  if(error){ el.checked=!ligado; el.closest('.perm').classList.toggle('on', !ligado); return erro(error); }
+  toast((ligado?'Liberado: ':'Bloqueado: ')+PERMISSOES.find(p=>p[0]===k)[1],'ok');
 }
 
 async function formNovoLogin(){
@@ -3879,26 +3929,29 @@ async function formNovoLogin(){
       const usuario_id = o.querySelector('#nlUser').value, papel = o.querySelector('#nlPapel').value;
       b.disabled = true;
       try{
-        const { error } = await S.sb.from('almox_acessos').insert({usuario_id, unidade_id:S.unidade.id, papel});
+        const { error } = await S.sb.from('almox_acessos').insert({usuario_id, unidade_id:S.unidade.id, papel,
+          permissoes: papel==='OPERADOR' ? PERM_PADRAO : []});
         if(error) throw error;
-        f(); toast('Acesso liberado.','ok'); pintarCadastro();
+        f(); toast('Acesso liberado.','ok'); recarregarAcessos();
       }catch(e){ erro(e); b.disabled=false; }
     }}] : [{rotulo:'Fechar',classe:'pri'}]});
 }
 
 async function mudarPapelAcesso(id, papel){
   const {error} = await S.sb.from('almox_acessos').update({papel}).eq('id',id);
-  error? erro(error) : toast('Papel atualizado.','ok');
+  if(error) return erro(error);
+  toast('Papel atualizado.','ok'); recarregarAcessos();
 }
 async function mudarAtivoAcesso(id, ativo){
   const {error} = await S.sb.from('almox_acessos').update({ativo}).eq('id',id);
-  error? erro(error) : toast(ativo?'Acesso liberado.':'Acesso bloqueado.','ok');
+  if(error) return erro(error);
+  toast(ativo?'Acesso liberado.':'Acesso bloqueado.','ok'); recarregarAcessos();
 }
 function removerAcesso(id, nome){
   confirmar('Remover acesso', `<b>${esc(nome)}</b> deixa de enxergar ${esc(S.unidade.codigo)}.
     O login continua existindo e mantém o acesso a outras unidades, se tiver.`,
     async()=>{ const {error} = await S.sb.from('almox_acessos').delete().eq('id',id);
-      if(error) throw error; toast('Acesso removido.','ok'); pintarCadastro(); }, 'Remover');
+      if(error) throw error; toast('Acesso removido.','ok'); recarregarAcessos(); }, 'Remover');
 }
 </script>
 <script>

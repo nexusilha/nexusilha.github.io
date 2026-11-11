@@ -1,0 +1,10 @@
+-- Permissões por login no Almoxarifado (aplicado em 2026-11-11 via migrations
+-- almox_permissoes_por_login e almox_permissoes_padrao).
+-- almox_acessos.permissoes text[]: funcionarios, catalogo, estrutura, fornecedores, correcoes, cobrancas.
+-- Gestor tem todas; Operador só as marcadas; Consulta nenhuma.
+-- Função almox_pode(unidade, permissão) usada nas políticas de inclusão/edição de
+-- funcionários, treinamentos, itens, variações, grades, tamanhos, categorias, setores,
+-- funções, dotações, fornecedores e cobranças, e nas funções desligar/reativar funcionário,
+-- sincronizar variações, cancelar empréstimo/movimentação, baixar/excluir cobrança.
+-- Exclusões, parâmetros, acessos, unidade, saldo inicial e reinício continuam só do gestor.
+-- Padrão para operador novo: funcionarios, catalogo, estrutura, fornecedores.
