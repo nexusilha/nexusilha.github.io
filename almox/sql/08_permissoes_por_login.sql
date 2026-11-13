@@ -8,3 +8,7 @@
 -- sincronizar variações, cancelar empréstimo/movimentação, baixar/excluir cobrança.
 -- Exclusões, parâmetros, acessos, unidade, saldo inicial e reinício continuam só do gestor.
 -- Padrão para operador novo: funcionarios, catalogo, estrutura, fornecedores.
+
+-- 2026-11-13 (migration almox_vinculo_extra): vínculo EXTRA (extra / freelancer) em almox_funcionarios,
+-- fora da dotação (almox_vw_dotacao), e função almox_cadastrar_extra(unidade, nome, cpf, obs)
+-- para o operador cadastrar o extra na hora do empréstimo.
