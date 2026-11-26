@@ -12,3 +12,7 @@
 -- 2026-11-13 (migration almox_vinculo_extra): vínculo EXTRA (extra / freelancer) em almox_funcionarios,
 -- fora da dotação (almox_vw_dotacao), e função almox_cadastrar_extra(unidade, nome, cpf, obs)
 -- para o operador cadastrar o extra na hora do empréstimo.
+
+-- 2026-11-26 (migration almox_dotacao_presumida): almox_funcionarios.dotacao_presumida.
+-- Funcionários ativos (não extras) existentes marcados como true: a dotação conta como completa
+-- (falta = 0 em almox_vw_dotacao). Não altera estoque nem posse registrada. Novos cadastros: false.
