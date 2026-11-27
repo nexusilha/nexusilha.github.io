@@ -687,7 +687,32 @@ const MODULOS={
 };
 const OPERADOR_KEY='nexus.operador';
 const OPERADOR_TTL=14*3600*1000; // pede o nome de novo a cada turno (14 h)
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+// Renovação automática do login: aba parada ou computador em repouso congela o timer que renova
+// a sessão; se a operação voltar "JWT expired", renova e repete uma vez (nada do que foi preenchido se perde).
+let __sbRef=null,__renov=null;
+async function __renovarSessao(){
+  if(!__renov) __renov=__sbRef.auth.refreshSession().finally(()=>setTimeout(()=>{__renov=null;},0));
+  const {data,error}=await __renov; return error?null:(data&&data.session)||null;
+}
+async function __fetchRenovando(url,opts={}){
+  const r=await fetch(url,opts);
+  if(r.status!==401||String(url).includes('/auth/v1/')||!__sbRef) return r;
+  let t='';try{t=await r.clone().text();}catch(e){}
+  if(!/jwt expired|PGRST301|invalid jwt|exp" claim/i.test(t)) return r;
+  const s=await __renovarSessao(); if(!s) return r;
+  const h=new Headers(opts.headers||{}); h.set('Authorization','Bearer '+s.access_token);
+  return fetch(url,{...opts,headers:h});
+}
+function __ligarRenovacao(cli){
+  __sbRef=cli;
+  const talvez=async()=>{try{const {data:{session}}=await cli.auth.getSession();
+    if(session&&session.expires_at&&session.expires_at*1000-Date.now()<120000) await __renovarSessao();}catch(e){}};
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='visible'){cli.auth.startAutoRefresh();talvez();} else cli.auth.stopAutoRefresh();});
+  window.addEventListener('focus',talvez);
+  return cli;
+}
+const sb=__ligarRenovacao(window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{global:{fetch:__fetchRenovando}}));
 const nx=sb.schema('nexus');
 
 const SETORES={bar:'Bar',cozinha:'Cozinha',cumim:'Cumim'};
